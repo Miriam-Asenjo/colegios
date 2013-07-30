@@ -1,0 +1,38 @@
+﻿@model Colegios.Web.Models.RegistrationModel
+
+<div id="accountDetails">
+        
+    <div class="row">
+        @Html.LabelFor(x => x.Email)
+        <div class="value">
+            @Html.TextBoxFor(x => x.Email, new { @class = "long_txt" })
+            @Html.ValidationMessageFor(x=> x.Email)
+        </div>
+    </div>
+
+    <div class="row">
+        @Html.LabelFor(x => x.Password)
+        <div class="value">
+            @Html.TextBoxFor(x => x.Password, new { @class = "long_txt" })
+            @Html.ValidationMessageFor(x=> x.Password)
+        </div>
+    </div>
+
+    <div class="row">
+        @Html.LabelFor(x => x.ConfirmPassword)
+        <div class="value">
+            @Html.TextBoxFor(x => x.ConfirmPassword, new { @class = "long_txt" })
+            @Html.ValidationMessageFor(x=> x.ConfirmPassword)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="value clearfix">
+                
+            <input type="submit" class="continueBtn" value="Continuar"/>
+            
+        </div>
+                
+    </div>
+</div>
+

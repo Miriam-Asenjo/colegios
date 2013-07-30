@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4097785B-8504-4D3F-9090-F8CCF5FE5D0A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Colegios.Query</RootNamespace>
+    <AssemblyName>Colegios.Query</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FluentNHibernate, Version=1.3.0.717, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=3.2.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NHibernate-3.2.0.GA-bin\Required_Bins\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpArch">
+      <HintPath>..\..\dependencies\SharpArch.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpArch.Domain, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SharpArch.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpArch.NHibernate">
+      <HintPath>..\..\packages\SharpArch.NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="EducationQuery.cs" />
+    <Compile Include="LocationQuery.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\CategoryDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\CategoryFieldDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\CategoryFieldInstitutionTypeDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\CityDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\EducationDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\HighLightNurseryDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\HighLightSchoolDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\LocalityTypeDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\LocalityDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\MarkDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\MarkLeaDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\NurseryDetailsDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\NurseryDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\NurseryLogDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\NurseryModifiedDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\NurseryDetailsModifiedDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\NurseryPicDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\PostReadDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\SchoolDetailsDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\SchoolDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\TownDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\UserDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\UserOpinionDtoMap.cs" />
+    <Compile Include="NHibernateMaps\ClassMaps\SchoolPicDtoMap.cs" />
+    <Compile Include="NurseryQuery.cs" />
+    <Compile Include="OpinionQuery.cs" />
+    <Compile Include="PostQuery.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SchoolQuery.cs" />
+    <Compile Include="UserQuery.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Colegios.ApplicationServices\Colegios.ApplicationServices.csproj">
+      <Project>{AD7843D8-5A0B-490C-8395-1176ED48F661}</Project>
+      <Name>Colegios.ApplicationServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Colegios.Query.Core\Colegios.Query.Core.csproj">
+      <Project>{813ABAC1-30B9-4B79-8DD2-9F0306D1AEE6}</Project>
+      <Name>Colegios.Query.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

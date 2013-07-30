@@ -1,0 +1,81 @@
+﻿@using System.Configuration
+@using Colegios.Web.Models
+@using Colegios.Web.Utils
+@using System.Collections
+@model SchoolIndexViewModel
+
+@section Seo {
+    <title>Coles y Guardes. La más completa información de colegios y guarderías de Madrid</title>
+    <meta name="description" content="En colesyguardes.es sabemos lo importante que es la educación de nuestros pequeños y lo difícil que es la elección del mejor centro, para ayudarte en esta tarea colesyguardes.es ha recopilado la información de todos los colegios de Madrid!. Horarios, actividades extraescolares, horas de inglés a la semana, información sobre el servicio de comedor, número de grupos por curso..." />
+    <meta name="keywords" content="Colegios, Colegios Bilingües, Colegios Bilingues, Colegios Inglés, Guarderías, Coles, Guarde, Elegir Colegio, Mejor Colegio, Colegios Madrid, Colegios de Madrid, Colegios en Madrid, Colegios Públicos Madrid, Colegios Públicos de Madrid, Colegios Públicos en Madrid, Colegios Privados Madrid, Colegios Privados de Madrid, Colegios Privados en Madrid, Colegios Concertados Madrid, Colegios Concertados de Madrid, Colegios Concertados en Madrid" />
+}
+
+@section Styles {
+    <link href="@Url.Content("~/Content/Home.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/Blog.css")" rel="Stylesheet" type="text/css" />
+}
+
+
+@Html.Action("Index", "Opinion")
+
+
+@Html.Partial("_SchoolSearch",Model.SearchModel)
+
+<div id="sections">
+@*    <div id="sectionGuardes">*@
+   <div style="float:left"><img src="@Url.Content("~/Content/themes/base/images/home/schoolBus.png")" width="460" height="250" style="margin-top:60px" /></div>
+@*    </div>*@
+    <div class="introduccion" style="width:550px; float:right; height: 200px;margin-right: 20px;margin-top:20px;">
+        <!--<a href="https://apps.facebook.com/easypromos-premium/promotions/12324" target="_blank"><center><img src="@Url.Content("~/Images/sorteohome.jpg")"/></center></a>-->
+            
+        @if (!String.IsNullOrEmpty(ConfigurationManager.AppSettings["sorteoMac"]))
+        {
+            <center><a href="@ConfigurationManager.AppSettings["sorteoMac"]" target="_blank"><img src="@Url.Content("~/Images/sorteoMacColesYGuardes.png")" style="margin-top:-20px" /></a></center>
+        }
+        else { 
+            @Html.Raw(Model.HomePageCMS.WelcomeText)
+        }
+            
+    </div>
+</div>
+@if (!String.IsNullOrEmpty(ConfigurationManager.AppSettings["sorteoMac"])) { 
+    <div style="width: 100%;margin:15px 50px 10px 50px;display:block;float:left;height:140px">
+        @Html.Raw(Model.HomePageCMS.WelcomeText)
+    </div>
+    
+}
+
+<script src="@Url.Content("~/Scripts/coles/search.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/contact/opinion.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/maps/googleApi.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+    $(document).ready(function() {
+
+    
+        
+        var options = {
+            Elements:  {
+                eldistrict: $('#distrito'),
+                ellocality: $('input[type=checkbox][id=locality]'),
+                hiddenlocation: $('#Locations'),
+                town: $("#TownId")                  
+            },
+            CityId: '@Model.SearchModel.CityId',
+            TownId: '@Model.SearchModel.TownId',
+            AllEducationTypes: @Html.Raw(Model.BaseModel.EducationTypes.ToJson()),
+            AllCities: @Html.Raw(Model.BaseModel.Cities.ToJson()),
+            AllTowns: @Html.Raw(Model.BaseModel.Towns.ToJson()),
+            AllDistricts: @Html.Raw(Model.BaseModel.Districts.ToJson()),
+            SelectedDistricts: @Html.Raw((Model.SearchModel.Locations != null) ? Model.SearchModel.Locations.Split(',').ToArray().ToJson() : "{}"),
+            City: ko.observable(),
+            Town: ko.observable(),
+            District: ko.observable(),
+            TabSelected: 'Home'
+        };
+
+        colesearch.init(options);
+
+    });
+
+</script>

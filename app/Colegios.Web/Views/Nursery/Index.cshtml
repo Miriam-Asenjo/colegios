@@ -1,0 +1,168 @@
+﻿@using Colegios.Web.Utils
+@using Colegios.Web.Models
+@using System.Configuration
+@using Colegios.Web.Enums
+@using Colegios.Query.Core.DTOs
+@using Colegios.Web.Infrastructure
+
+@model NurseriesViewModel
+
+@section Seo {
+@*    <title>El mejor listado de colegios y guarderías de Madrid con todos los detalles que buscan los padres</title>*@
+
+    @if (Model.NurserySearchModel.TownId == (int)TownEnum.MadridCapital)
+    {
+        <title>El mejor listado de guarderías de Madrid con todos los detalles que buscan los padres</title>
+        <meta name="description" content="El mejor listado de guarderias de todos los distritos de Madrid:  Arganzuela, Barajas, Carabanchel, Centro, Chamrtín, Chamberí, Ciudad Lineal, Fuencarral, Hortaleza, Latina, Moncloa, Moratalaz, Vallecas, Retiro, Salamanca, San Blas, Tetuán, Usera, Vicálvaro, Villaverde" />
+        <meta name="keywords" content="Listado de Guarderias Madrid, Horarios Guarderias, Actividades Guarderias, Mejores Guarderías, Actividades Extraescolares, Cuota Guarderias, Guarderias Bilingües, Guarderias Arganzuela, Guarderias Barajas, Guarderias Carabanchel, Guarderias Centro, Guarderias Chamrtín, Guarderias Chamberí, Guarderias Ciudad Lineal, Guarderias Fuencarral, Guarderias Hortaleza, Guarderias Latina, Guarderias Moncloa, Guarderias Moratalaz, Guarderias Vallecas, Guarderias Retiro, Guarderias Salamanca, Guarderias San Blas, Guarderias Tetuán, Guarderias Usera, Guarderias Vicálvaro, Guarderias Villaverde" />    
+    }
+    else
+    {
+        var townsByCity = Model.SearchBaseModel.Towns[Model.NurserySearchModel.CityId.ToString()];
+        if (townsByCity != null) {
+            var town = townsByCity.Where(x => x.Id == Model.NurserySearchModel.TownId).SingleOrDefault();
+
+            if (town != null)
+            {
+                var title = "El mejor listado de guarderías en " + town.Name + " con todos los detalles que buscan los padres";
+                <title>@title</title>
+                var description = "El mejor listado de guarderias en " + town.Name + ", " + town.City.Name;
+                <meta name="description" content="@description" />
+                var keywords = "Listado de Guarderias " + town.Name +", Horarios Guarderias en " + town.Name + ", Actividades Guarderias en " + town.Name +", Mejores Guarderías en " + town.Name + ", Cuota Guarderias en " + town.Name + ", Guarderias Bilingües en " + town.Name; 
+                <meta name="keywords" content="@keywords" />
+            }
+            else { 
+                <title>El mejor listado de guarderías de Madrid con todos los detalles que buscan los padres</title>
+                <meta name="description" content="El mejor listado de guarderias de todos los distritos de Madrid:  Arganzuela, Barajas, Carabanchel, Centro, Chamrtín, Chamberí, Ciudad Lineal, Fuencarral, Hortaleza, Latina, Moncloa, Moratalaz, Vallecas, Retiro, Salamanca, San Blas, Tetuán, Usera, Vicálvaro, Villaverde" />
+                <meta name="keywords" content="Listado de Guarderias Madrid, Horarios Guarderias, Actividades Guarderias, Mejores Guarderías, Actividades Extraescolares, Cuota Guarderias, Guarderias Bilingües, Guarderias Arganzuela, Guarderias Barajas, Guarderias Carabanchel, Guarderias Centro, Guarderias Chamrtín, Guarderias Chamberí, Guarderias Ciudad Lineal, Guarderias Fuencarral, Guarderias Hortaleza, Guarderias Latina, Guarderias Moncloa, Guarderias Moratalaz, Guarderias Vallecas, Guarderias Retiro, Guarderias Salamanca, Guarderias San Blas, Guarderias Tetuán, Guarderias Usera, Guarderias Vicálvaro, Guarderias Villaverde" />          
+            }
+
+        } 
+        
+    }
+
+}
+
+@section Styles {
+    <link href="@Url.Content("~/Content/Home.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/School.css")" rel="stylesheet" type="text/css" />
+}
+
+@Html.Action("Index", "Opinion")
+@Html.Partial("_NurserySearch", Model.NurserySearchModel)
+
+<div class="content">
+    <header class="resultsHeader">
+            <h2>@Model.Nurseries.TotalCount Escuelas Infantiles en 
+                @if (Model.Localites.Count() == 0)
+                { 
+                    <span>@Model.SearchBaseModel.Towns[Model.NurserySearchModel.CityId.ToString()].Where(x => x.Id == Model.NurserySearchModel.TownId).FirstOrDefault().Name</span>
+                }
+                else
+                {
+                    foreach (var locality in @Model.Localites)
+                    { 
+                       <span>@locality.Name</span><span>&nbsp;</span>
+                    }
+                }
+            </h2> 
+    </header>
+
+@Html.Partial("_PaginationNurseries", Model.Nurseries)
+
+    @foreach (var highLightedNursery in Model.HighLightedNurseries)
+    {
+        ViewData["highLighted"] = true;
+        ViewData["logoName"] = highLightedNursery.LogoName;
+        Html.RenderPartial("_NurseryItem", highLightedNursery.Nursery);
+    }
+
+    @foreach (var nursery in Model.Nurseries.Items)
+    {
+        ViewData["highLighted"] = false;
+        ViewData["logoName"] = null;
+        Html.RenderPartial("_NurseryItem", nursery);
+    }
+    
+   @Html.Partial("_PaginationNurseries", Model.Nurseries)
+
+
+   <div style="float:left;margin-top:0px;width:100%">
+   @if (Model.NurserySearchModel.TownId == (int)TownEnum.MadridCapital)
+   { 
+        <h3 style="color:#FF4F01">Escuelas infantiles en otras localidades</h3>
+        
+       var otherLocations = "<table cellspacing='0' cellpadding='0' style='width:100%; border:none'><tr>";
+       int cell = 0;
+
+       foreach (var city in Model.SearchBaseModel.Towns.Keys)
+       {
+
+           foreach (var town in Model.SearchBaseModel.Towns[city])
+           {
+               if ((cell == 1) && (town.Id != (int)TownEnum.MadridCapital))
+               {
+                   otherLocations += "<td style='border:none'><a href='" + Url.NurseriesLocalityAction(town.City.Name, town.Name, town.Id) + "'>Escuelas infantiles en " + @town.Name + "&nbsp;&nbsp;<img alt='Web' width='10' height='15' src=" + Url.Content("/Content/themes/base/icons/iconmoreinfo.png") + "><img alt='Web' width='10' height='15' src=" + Url.Content("/Content/themes/base/icons/iconmoreinfo.png") + "></a></td></tr><tr>";
+                   cell = 0;
+               }
+               else if (town.Id != (int)TownEnum.MadridCapital)
+               {
+                   otherLocations += "<td style='border:none'><a href='" + Url.NurseriesLocalityAction(town.City.Name, town.Name, town.Id) + "'>Escuelas infatiles en " + @town.Name + "&nbsp;&nbsp;<img alt='Web' width='10' height='15' src=" + Url.Content("/Content/themes/base/icons/iconmoreinfo.png") + "><img alt='Web' width='10' height='15' src=" + Url.Content("/Content/themes/base/icons/iconmoreinfo.png") + "></a></td>";
+                   cell += 1;
+               }
+           }
+       }
+       if (cell == 0)
+       {
+           otherLocations += "</tr>";
+       }
+
+       if (cell != 0)
+       {
+           for (var index = cell; index < 2; index++)
+           {
+               otherLocations += "<td style='border:none'>&nbsp;</td>";
+           }
+           otherLocations += "</tr>";
+       }
+
+       otherLocations += "</table>";
+            @Html.Raw(otherLocations);
+   }
+    
+    </div>
+
+</div>
+
+
+<script src="@Url.Content("~/Scripts/coles/search.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/maps/googleApi.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/contact/opinion.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+    var options = {
+        Elements:  {
+            eldistrict: $('#distrito'),
+            ellocality: $('input[type=checkbox][id=locality]'),
+            hiddenlocation: $('#Locations'),
+            town: $("#TownId")          
+        },
+        CityId: '@Model.NurserySearchModel.CityId',
+        AllEducationTypes: @Html.Raw(Model.SearchBaseModel.EducationTypes.ToJson()),
+        AllCities: @Html.Raw(Model.SearchBaseModel.Cities.ToJson()),
+        AllTowns: @Html.Raw(Model.SearchBaseModel.Towns.ToJson()),
+        AllDistricts: @Html.Raw(Model.SearchBaseModel.Districts.ToJson()),
+        SelectedDistricts: @Html.Raw((Model.NurserySearchModel.Locations != null) ? Model.NurserySearchModel.Locations.Split(',').ToArray().ToJson() : "{}"),
+        TownId: '@Model.NurserySearchModel.TownId',
+        EducationType: '@Model.NurserySearchModel.EducationTypeId',
+        District: ko.observable(),
+        MapOptions: {
+            latitude: 40.444302,
+            longitude: -3.652793
+        },
+        TabSelected: 'Guarderias'
+    };
+
+    colesearch.init(options, mapgoogle);
+
+</script>

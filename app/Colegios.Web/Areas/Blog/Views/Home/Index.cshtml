@@ -1,0 +1,85 @@
+﻿@using System.Globalization
+@using Colegios.Web.Areas.Blog.Models
+@model BlogViewModel
+
+@section Seo {
+    <title>Blog de Coles y Guardes: Becas y Ayudas, Disfraces, Medio ambiente, Ocio Infantil, Salud, Actividades infantiles</title>
+    <meta name="description" content="Nuestro blog trata todos los temas del día a día para ayudarte lo máximo posible en la difícil pero gratificante tarea de ser padres" />
+    <meta name="keywords" content="Blog Padres, Becas, Disfraces, Medio ambiente, Ocio Infantil, Salud Infantil, Actividades infantiles, Colegios, Guarderías" />
+
+}
+
+@section Styles {
+    <link href="@Url.Content("~/Content/Home.css")" rel="stylesheet" type="text/css" /> 
+    <link href="@Url.Content("~/Content/Blog.css")" rel="stylesheet" type="text/css" /> 
+}
+
+
+@Html.Action("Index", "Opinion", new { area = "" })
+
+
+<div class="blogContent">
+@*    @Html.Partial("_Topics", Model.Topics)*@
+    @Html.Action("RightMenu", "Home", new { showActivities = false })
+    @foreach (var post in Model.Posts)
+    {
+        <article class="postTitle">
+            <h3><a href="@post.Url" class="postTitleLink">@post.Title</a></h3>
+            <div style="margin-bottom:10px">
+                @Html.Raw(post.Introduction)
+            </div>
+        </article>
+    
+    }
+    
+    <div>
+        <a href="@Url.Action("Index", "Posts", new { Area = "Blog", pageNo = Model.NextPage })">M&aacute;s Art&iacute;culos</a>
+        <img src="@Url.Content("/Content/themes/base/icons/iconmoreinfo.png")"/>
+        <img src="@Url.Content("/Content/themes/base/icons/iconmoreinfo.png")" />
+    </div>
+
+
+    <header class="resultsHeader">
+        <h2 style="color:#FF4F01;">Actividades Infantiles</h2>
+    </header>
+    
+    @foreach (var activity in Model.Activities)
+    {
+            <h3>@activity.Heading</h3>
+            <div style="width:300px">
+                @Html.Raw(activity.Description)
+            </div>
+            <ul class="activityDetails">
+                <li><span class="activityFieldLabel">Fecha:&nbsp;</span><span class="activityFieldValue">@activity.StartDate.ToString("dd MMMM", new CultureInfo("es-ES"))</span></li>
+                <li><span class="activityFieldLabel">Lugar:&nbsp;</span><span class="activityFieldValue">@activity.Place</span></li>
+                <li><span class="activityFieldLabel">Direcci&oacute;n:&nbsp;</span><span class="activityFieldValue">@activity.Address</span></li>
+                <li><span class="activityFieldLabel">P&uacute;blico: &nbsp;</span><span class="activityFieldValue">@activity.RecommendedPublic</span></li>
+                <li><span class="activityFieldLabel">Precio:&nbsp;</span><span clas="activityFieldValue">@activity.Price</span></li>
+                @if (!string.IsNullOrEmpty(activity.WebPage))
+                { 
+                    <li><span class="activityFieldLabel">Web Page:&nbsp;</span><span class="activityFieldValue">@activity.WebPage</span></li>
+                }
+                
+            </ul>
+    }
+
+    <div>
+        <a href="@Url.Action("index", "actividades", new { Area = "Blog", pageNo = Model.NextPage })">M&aacute;s Actividades</a>
+        <img src="@Url.Content("/Content/themes/base/icons/iconmoreinfo.png")"/>
+        <img src="@Url.Content("/Content/themes/base/icons/iconmoreinfo.png")" />
+    </div>
+</div>
+
+
+
+<script src="@Url.Content("~/Scripts/blog/blog.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/contact/opinion.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+    var options = {
+        TabSelected: 'Blogs'
+    };
+
+    blog.init(options);
+
+</script>

@@ -1,0 +1,110 @@
+﻿@using System.Configuration
+@using Colegios.Web.Utils
+@using Colegios.Web.Models
+@model DistrictMarkModel
+           
+
+
+        <div class="districtMarks">
+        <h3>Notas distrito @Model.School.Locality.Name</h3>
+
+        <table class="tableMarks">
+
+            <thead>
+                <tr>
+                    <th scope="col">Colegio</th>
+                    <th scope="col">Nº Alumnos</th>
+                    <th scope="col">Aprobados Lengua</th>
+                    <th scope="col">Aprobados Mates</th>
+                    <th scope="col">Aprobados Cultura</th>
+                    <th scope="col">Nota Media</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <th colspan="6">Colegios Distrito</th>
+                </tr>
+                @foreach (var schoolMark in Model.DistrictMarks)
+                { 
+                    <tr>
+                        <td>@schoolMark.Mark.School.Name</td>
+                        <td>@(schoolMark.Mark.TotalStudents == null ? "-": schoolMark.Mark.TotalStudents.ToString())</td>
+                        <td>@schoolMark.Mark.LanguageTotalPercentageSuccess %</td>
+                        <td>@schoolMark.Mark.MathsTotalPercentageSuccess %</td>
+                        <td>@schoolMark.Mark.CultureTotalPercentageSuccess @(schoolMark.Mark.CultureTotalPercentageSuccess == null ? "-" : "%")</td>
+                        <td>@schoolMark.Mark.AverageMark</td>
+                    </tr>
+                }
+        
+
+
+                @foreach (var schoolTypeMark in @Model.SchoolTypeMarks)
+                { 
+                    <tr>
+                        <th colspan="6">@schoolTypeMark.Key.Name</th>
+                    </tr>
+                    foreach (var typeMark in @schoolTypeMark.Value)
+                    { 
+                        <tr>
+                            <td>@typeMark.Mark.School.Name</td>
+                            <td>@(typeMark.Mark.TotalStudents == null ? "-" : typeMark.Mark.TotalStudents.ToString())</td>
+                            <td>@typeMark.Mark.LanguageTotalPercentageSuccess %</td>
+                            <td>@typeMark.Mark.MathsTotalPercentageSuccess %</td>
+                            <td>@typeMark.Mark.CultureTotalPercentageSuccess @(typeMark.Mark.CultureTotalPercentageSuccess == null ? "-" : "%")</td>
+                            <td>@typeMark.Mark.AverageMark</td>
+                        </tr>
+                    }
+                }
+        
+            </tbody>
+        </table>
+        </div>
+
+
+
+
+        <div class="schoolMarks">
+
+            <h3>Notas del Colegio</h3>
+
+            <ul style="list-style:none;padding-left:0px">
+                <li><img src="@Url.Content("/Content/themes/base/icons/trophy.png")" width="30" height="30"/>
+                    @String.Concat(new object[] { Model.GlobalDistrictRanking, " º ranking todas los colegios del distrito en " + Model.YearMarks })
+                </li>
+                <li><img src="@Url.Content("/Content/themes/base/icons/trophy.png")" width="30" height="30"/>
+                    @String.Concat(new object[] { Model.RankingTypeSchool, " º ranking todas las colegios " + Model.School.Type.Name + " del distrito en " + Model.YearMarks})
+                </li>
+            </ul>
+
+            <table class="tableMarks">
+
+                <thead>
+                    <tr>
+                        <th scope="col">Nº Alumnos</th>
+                        <th scope="col">Aprobados Lengua</th>
+                        <th scope="col">Aprobados Mates</th>
+                        <th scope="col">Aprobados Cultura</th>
+                        <th scope="col">Nota Media</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var schoolMark in Model.School.Marks.OrderByDescending(x=> x.YearExam))
+                    {
+                        <tr>
+                            <th colspan="5">@schoolMark.YearExam</th>
+                        </tr>
+                        <tr>
+                            <td>@(schoolMark.TotalStudents == null ? "-": schoolMark.TotalStudents.ToString())</td>
+                            <td>@schoolMark.LanguageTotalPercentageSuccess %</td>
+                            <td>@schoolMark.MathsTotalPercentageSuccess %</td>
+                            <td>@schoolMark.CultureTotalPercentageSuccess @(schoolMark.CultureTotalPercentageSuccess == null ? "-" : "%")</td>
+                            <td>@schoolMark.AverageMark</td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        
+        </div>

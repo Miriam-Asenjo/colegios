@@ -1,0 +1,62 @@
+﻿@using Colegios.Web.Models
+@using System.Collections
+@using Colegios.Web.Enums
+@using Colegios.Web.Infrastructure
+@using Colegios.Web.Utils
+@using System.Configuration
+
+@{
+    ViewBag.Title = "_MarksSearch";
+}
+
+@model MarkSearchViewModel
+
+<div id="searchForm" style="display:block">
+
+@{
+    var lastYearMarks = ConfigurationManager.AppSettings[Constants.LastYearMarks];
+    var lastYear = lastYearMarks == null ? 2012 : Int32.Parse(lastYearMarks);
+
+    var years = new List<int>();
+    for (var index = 0; index < 4; index++)
+    {
+        years.Add(lastYear);
+        lastYear--;
+    }    
+   
+}
+
+ @using (Html.BeginForm("marks", "school", FormMethod.Post, new { style = "position:relative" }))
+ {
+
+        <div class="row" style="width:100%">
+
+            
+            @Html.LabelFor(x => x.MarkType)
+            @Html.DropDownListForEnum(x => x.MarkType, typeof(MarkTypeEnum))
+            @Html.LabelFor(x => x.Year)
+            @Html.DropDownListFor(x => x.Year, years.Select(x=> new SelectListItem{ Value=x.ToString(), Text=x.ToString()}))
+            @Html.LabelFor(x => x.EducationTypeId)
+            @Html.DropDownListFor(x => x.EducationTypeId, new SelectList(new ArrayList()), new Dictionary<string, object>() { { "data-bind", "options: allEducationTypes, optionsText: 'Name', optionsValue: 'Id',value: educationType, optionsCaption: 'Elige un tipo de centro...'" } })
+        </div>
+     
+        <div class="row" style="width:100%;padding-left:40px;position:relative">
+
+            @Html.LabelFor(x => x.CityId)
+            @Html.DropDownListFor(x => x.CityId, new SelectList(new ArrayList()), new Dictionary<string, object>() { { "data-bind", "options: allCities, optionsText: 'Name', optionsValue: 'Id', value: city" }, { "class", "selectCity" } })
+            @Html.ValidationMessageFor(x => x.CityId)    
+            @Html.LabelFor(x => x.TownId)
+            @Html.DropDownListFor(x => x.TownId, new SelectList(new ArrayList()), new Dictionary<string, object>() { { "data-bind", "options: towns, optionsText: 'Name', optionsValue: 'Id', value: town" }, { "class", "selectTown" } })
+            @Html.ValidationMessageFor(x => x.TownId)
+@*            @Html.HiddenFor(x => x.Locations)*@
+            <label for="Locations" style="position:relative;margin-left:40px">Distritos</label>
+            <div style="position:absolute;top:0px;margin-top:-30px;margin-left:600px;padding-top:0px">
+                
+                @Html.DropDownListFor(x => x.Locations, new SelectList(new ArrayList()), new Dictionary<string, object> { { "data-bind", "options: districts, optionsText: 'Name', optionsValue: 'Id'" }, { "size", '2' }, { "multiple", "multiple" }, { "style", "height: 80px" } })
+            </div>
+            <input type="submit" value="Notas" class="btn_search" style="float:right;margin-right:60px"/>
+        </div>
+     
+
+ }
+</div>

@@ -1,0 +1,63 @@
+﻿@using Colegios.Web.Utils
+@using Colegios.Query.Core.DTOs
+@using Colegios.Web.Infrastructure
+@model PageList<NurseryDto>
+
+@if (Model.TotalCount > 0) { 
+    <!-- pagination -->
+    <div class="pageContainer">
+
+        @{ var previous = Model.PageNo - 1;
+           var next = Model.PageNo + 1;
+           var numPages = 0;
+           if (previous == 0)
+           {
+               numPages = 2;
+               <span class="currentPage">1&nbsp;</span>
+           }else if (previous == 1) {
+               numPages = 1;
+               <a href="@Url.NurseryListAction(1)">1</a><span>&nbsp;</span>
+               <span class="currentPage">@Model.PageNo&nbsp;</span>
+           }
+           else if (previous == 2)
+           {
+                <a href="@Url.NurseryListAction(1)">1</a><span>&nbsp;</span>
+                <a href="@Url.NurseryListAction(previous)">@previous</a><span>&nbsp;</span>                    
+                <span class="currentPage">@Model.PageNo&nbsp;</span>
+           }
+           else
+           {
+               numPages = 1;
+                <a href="@Url.NurseryListAction(1)">1</a><span>&nbsp;..&nbsp;</span>
+                <span>..&nbsp;</span>
+                <a href="@Url.NurseryListAction(previous)">@previous</a><span>&nbsp;</span>                    
+                <span class="currentPage">@Model.PageNo&nbsp;</span>
+           }
+
+           var lastPage = false;
+           for (int index = 1; index <= (numPages + 1); index++)
+           {
+               if (Model.PageNo == Model.LastPage) {
+                   lastPage = true;
+                   break;
+               }
+               if ((Model.PageNo + index) == Model.LastPage)
+               {
+                    <a href="@Url.NurseryListAction(Model.LastPage)">@Model.LastPage</a>
+                   lastPage = true;
+                   break;
+               }
+               else
+               { 
+                   <a href="@Url.NurseryListAction(Model.PageNo + index)">@(Model.PageNo + index)</a><span>&nbsp;&nbsp;</span>
+               }
+           }
+           if (!lastPage)
+           { 
+                <span>..&nbsp;</span><a href="@Url.NurseryListAction(Model.LastPage)">@Model.LastPage</a> 
+           }
+           
+        }
+    </div>          
+}
+

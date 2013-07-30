@@ -1,0 +1,144 @@
+﻿@using System.Collections
+@using Colegios.Web.Infrastructure
+@using Colegios.Query.Core.DTOs
+@using Colegios.Web.Enums
+@using Colegios.Web.Models
+@using Colegios.Web.Utils
+
+@model MarksViewModel
+
+@section Seo {
+    <title>Notas examen cdi año 2012 colegios Madrid</title>
+    <meta name="description" content="Notas examen cdi año 2012 colegios Madrid, ranking colegios madrid por notas" />
+    <meta name="keywords" content="notas examenes cdi, notas examenes lea, cdi colegios madrid, lea colegios madrid, ranking notas cdi, ranking notas lea" />
+}
+
+@section Styles {
+    <link href="@Url.Content("~/Content/Home.css")" rel="stylesheet" type="text/css" />
+}
+
+@Html.Action("Index", "Opinion")
+
+@Html.Partial("_MarksSearch", Model.SearchModel)
+
+
+
+
+@if (Model.Schools.Any())
+{ 
+    <div style="width:100%;margin-top:20px;margin-left:auto;margin-right:auto;float:left;display:block">
+
+        <div class="pageContainer">
+
+            @if (Model.PageNo > 1) { 
+               <a href="@Url.SchoolLocalityMarks(Model.SearchModel.MarkType, Model.SearchModel.EducationTypeId, Model.SearchModel.Year, Model.BaseModel.Cities.Where(x => x.Id == Model.SearchModel.CityId).First().Name, Model.SearchModel.CityId, Model.BaseModel.Towns[Model.SearchModel.CityId.ToString()].Where(x => x.Id == Model.SearchModel.TownId).First().Name, Model.SearchModel.TownId, Model.SearchModel.Locations, Model.PageNo - 1, Model.PageSize)"><< Anterior</a>
+            }
+            @if (Model.NumTotalSchools > Model.PageNo * Model.PageSize)
+            {
+                <a href="@Url.SchoolLocalityMarks(Model.SearchModel.MarkType, Model.SearchModel.EducationTypeId, Model.SearchModel.Year, Model.BaseModel.Cities.Where(x => x.Id == Model.SearchModel.CityId).First().Name, Model.SearchModel.CityId, Model.BaseModel.Towns[Model.SearchModel.CityId.ToString()].Where(x => x.Id == Model.SearchModel.TownId).First().Name, Model.SearchModel.TownId, Model.SearchModel.Locations, Model.PageNo + 1, Model.PageSize)">Siguiente >></a>
+            }
+
+        </div>
+        <div style="width:100%;float:left;display:block">
+            <table align="center">
+
+            <thead>
+                <tr>
+                    <th>Ranking</th>
+                    <th>Colegio</th>
+                    <th>Tipo Centro</th>
+                    <th>Localidad</th>        
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{var ranking = (Model.PageNo -1)* Model.PageSize + 1;}
+                @foreach (var school in Model.Schools)
+                { 
+                    <tr>
+                        <td>@(ranking)º</td>
+                        <td>@school.Name</td>
+                        <td>
+                            @if (school.Type.Name.Equals("Público"))
+                            { 
+                                <img alt="SchoolType" width="20" height="20" src="@Url.Content("/Content/themes/base/icons/publico.png")" />@school.Type.Name
+                            }
+                            @if (school.Type.Name.Equals("Concertado"))
+                            { 
+                                <img alt="SchoolType" width="20" height="20" src="@Url.Content("/Content/themes/base/icons/concertado.png")" />@school.Type.Name
+                            }  
+                            @if (school.Type.Name.Equals("Privado"))
+                            { 
+                                <img alt="SchoolType" width="20" height="20" src="@Url.Content("/Content/themes/base/icons/privado.png")" />@school.Type.Name
+                            } 
+                    
+                        </td>
+                        @if (school.Locality.Name.Equals(school.Locality.Town.Name))
+                        {
+                            <td>@school.Locality.Name</td>
+                        }
+                        else
+                        {
+                            <td>@(school.Locality.Name) - @(school.Locality.Town.Name)</td>
+                        }
+                        <td><a href="@Url.SchoolDetailsAction(school.Name, school.Id)">Ver Notas</a></td>
+                    </tr>
+                        ranking = ranking + 1;
+                }
+    
+    
+            </tbody>
+
+
+        </table>
+
+        </div>
+
+        <div class="pageContainer">
+
+            @if (Model.PageNo > 1) { 
+               <a href="@Url.SchoolLocalityMarks(Model.SearchModel.MarkType, Model.SearchModel.EducationTypeId, Model.SearchModel.Year, Model.BaseModel.Cities.Where(x => x.Id == Model.SearchModel.CityId).First().Name, Model.SearchModel.CityId, Model.BaseModel.Towns[Model.SearchModel.CityId.ToString()].Where(x => x.Id == Model.SearchModel.TownId).First().Name, Model.SearchModel.TownId, Model.SearchModel.Locations, Model.PageNo - 1, Model.PageSize)"><< Anterior</a>
+            }
+            @if (Model.NumTotalSchools > (Model.PageNo * Model.PageSize))
+            {
+                <a href="@Url.SchoolLocalityMarks(Model.SearchModel.MarkType, Model.SearchModel.EducationTypeId, Model.SearchModel.Year, Model.BaseModel.Cities.Where(x => x.Id == Model.SearchModel.CityId).First().Name, Model.SearchModel.CityId, Model.BaseModel.Towns[Model.SearchModel.CityId.ToString()].Where(x => x.Id == Model.SearchModel.TownId).First().Name, Model.SearchModel.TownId, Model.SearchModel.Locations, Model.PageNo + 1, Model.PageSize)">Siguiente</a>
+            }
+
+        </div>
+
+
+    </div>
+}
+
+<script src="@Url.Content("~/Scripts/coles/marks.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/contact/opinion.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+    $(document).ready(function (){
+        
+        var options = {
+            Elements:  {
+                eldistrict: $('#distrito'),
+                ellocality: $('input[type=checkbox][id=locality]'),
+                hiddenlocation: $('#Locations'),
+                town: $("#TownId")                  
+            },
+            CityId: '@Model.SearchModel.CityId',
+            TownId: '@Model.SearchModel.TownId',
+            AllEducationTypes: @Html.Raw(Model.BaseModel.EducationTypes.ToJson()),
+            AllCities: @Html.Raw(Model.BaseModel.Cities.ToJson()),
+            AllTowns: @Html.Raw(Model.BaseModel.Towns.ToJson()),
+            AllDistricts: @Html.Raw(Model.BaseModel.Districts.ToJson()),
+            SelectedDistricts: @Html.Raw((Model.SearchModel.Locations != null) ? Model.SearchModel.Locations.ToArray().ToJson() : "{}"),
+            City: ko.observable(),
+            Town: ko.observable(),
+            District: ko.observable(),
+            TabSelected: 'Home'
+        };
+
+        schoolmarks.init(options);
+
+    });
+
+
+</script>

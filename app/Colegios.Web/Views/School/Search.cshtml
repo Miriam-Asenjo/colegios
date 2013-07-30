@@ -1,0 +1,165 @@
+﻿@using System.Configuration
+@using Colegios.Web.Models
+@using Colegios.Web.Utils
+@using System.Collections
+@using Colegios.Web.Infrastructure
+@using Colegios.Query.Core.DTOs
+@using Colegios.Web.Enums
+
+
+@model SchoolsViewModel
+
+@section Seo {
+@*    <title>El mejor listado de colegios y guarderías de Madrid con todos los detalles que buscan los padres</title>*@
+    @if (Model.IndexModel.SearchModel.TownId == (int)TownEnum.MadridCapital)
+    { 
+         <title>El mejor listado de colegios de Madrid con todos los detalles que buscan los padres</title>
+         <meta name="description" content="El mejor listado de Colegios de todos los distritos de Madrid:  Arganzuela, Barajas, Carabanchel, Centro, Chamrtín, Chamberí, Ciudad Lineal, Fuencarral, Hortaleza, Latina, Moncloa, Moratalaz, Vallecas, Retiro, Salamanca, San Blas, Tetuán, Usera, Vicálvaro, Villaverde" />
+         <meta name="keywords" content="Listado de Colegios, Ranking Colegios, Resultados Colegios, Mejores Colegios, Mejores Guarderías, Notas Colegios, Horarios Colegios, Actividades Extraescolares, Cuota Colegios, Precio Colegio, Idiomas, Bilingüe, Comedor, Notas Media de Colegios, Colegios Arganzuela, Colegios Barajas, Colegios Carabanchel, Colegios Centro, Colegios Chamrtín, Colegios Chamberí, Colegios Ciudad Lineal, Colegios Fuencarral, Colegios Hortaleza, Colegios Latina, Colegios Moncloa, Colegios Moratalaz, Colegios Vallecas, Colegios Retiro, Colegios Salamanca, Colegios San Blas, Colegios Tetuán, Colegios Usera, Colegios Vicálvaro, Colegios Villaverde" />
+    }
+    else {
+        var townsByCity = Model.IndexModel.BaseModel.Towns[Model.IndexModel.SearchModel.CityId.ToString()];
+        if (townsByCity != null) {
+            var town = townsByCity.Where(x => x.Id == Model.IndexModel.SearchModel.TownId).SingleOrDefault();
+
+            if (town != null)
+            {
+                var title = "El mejor listado de colegios en " + town.Name + " con todos los detalles que buscan los padres";
+                <title>@title</title>
+                var description = "El mejor listado de Colegios en " + town.Name + ", " + town.City.Name;
+                <meta name="description" content="@description" />
+                var keywords = "Listado de Colegios en " + town.Name + ", Ranking Colegios en " + town.Name + ", Resultados Colegios en " + town.Name + ", Mejores Colegios en " + town.Name + ", Notas Colegios en " + town.Name + ", Horarios Colegios en " + town.Name + ", Precio Colegio en " + town.Name + ", Colegios Bilingües en " + town.Name + ", Comedor, Notas Media de Colegios en " + town.Name; 
+                <meta name="keywords" content="@keywords" />
+            }
+            else { 
+                <title>El mejor listado de colegios de Madrid con todos los detalles que buscan los padres</title>
+                <meta name="description" content="El mejor listado de Colegios de todos los distritos de Madrid:  Arganzuela, Barajas, Carabanchel, Centro, Chamrtín, Chamberí, Ciudad Lineal, Fuencarral, Hortaleza, Latina, Moncloa, Moratalaz, Vallecas, Retiro, Salamanca, San Blas, Tetuán, Usera, Vicálvaro, Villaverde" />
+                <meta name="keywords" content="Listado de Colegios, Ranking Colegios, Resultados Colegios, Mejores Colegios, Mejores Guarderías, Notas Colegios, Horarios Colegios, Actividades Extraescolares, Cuota Colegios, Precio Colegio, Idiomas, Bilingüe, Comedor, Notas Media de Colegios, Colegios Arganzuela, Colegios Barajas, Colegios Carabanchel, Colegios Centro, Colegios Chamrtín, Colegios Chamberí, Colegios Ciudad Lineal, Colegios Fuencarral, Colegios Hortaleza, Colegios Latina, Colegios Moncloa, Colegios Moratalaz, Colegios Vallecas, Colegios Retiro, Colegios Salamanca, Colegios San Blas, Colegios Tetuán, Colegios Usera, Colegios Vicálvaro, Colegios Villaverde" />            
+            }
+
+        }
+
+    }
+}
+
+@section Styles {
+    <link href="@Url.Content("~/Content/Home.css")" rel="stylesheet" type="text/css" />
+}
+
+@Html.Action("Index", "Opinion")
+@Html.Partial("_SchoolSearch", Model.IndexModel.SearchModel)
+
+<div class="content">
+    <header class="resultsHeader">
+            <h2>@Model.Schools.TotalCount Colegios en 
+                @if (Model.Localites.Count() == 0)
+                { 
+                    <span>@Model.IndexModel.BaseModel.Towns[Model.IndexModel.SearchModel.CityId.ToString()].Where(x => x.Id == Model.IndexModel.SearchModel.TownId).FirstOrDefault().Name</span>
+                }
+                else
+                {
+                    foreach (LocalityDto locality in @Model.Localites)
+                    { 
+                       <span>@locality.Name</span><span>&nbsp;</span>
+                    }
+                }
+            </h2> 
+    </header>
+
+    @Html.Partial("_PaginationSchools", Model.Schools)
+
+    @foreach (var highLightedSchool in Model.HighLightedSchools)
+    {
+        ViewData["highLighted"] = true;
+        ViewData["logoName"] = highLightedSchool.LogoName;
+        Html.RenderPartial("_SchoolItem", highLightedSchool.School);
+    }
+
+    @foreach (var school in Model.Schools.Items)
+    {
+        ViewData["highLighted"] = false;
+        ViewData["logoName"] = null;
+        Html.RenderPartial("_SchoolItem", school);
+    }
+    
+   @Html.Partial("_PaginationSchools", Model.Schools)
+
+   <div style="float:left;margin-top:0px;width:100%">
+   @if (Model.IndexModel.SearchModel.TownId == (int)TownEnum.MadridCapital)
+   { 
+        <h3 style="color:#FF4F01">Colegios en otras localidades</h3>
+        
+       var otherLocations = "<table cellspacing='0' cellpadding='0' style='width:100%; border:none'><tr>";
+       int cell = 0;
+
+       foreach (var city in Model.IndexModel.BaseModel.Towns.Keys)
+       {
+
+           foreach (var town in Model.IndexModel.BaseModel.Towns[city])
+           {
+               if ((cell == 1) && (town.Id != (int)TownEnum.MadridCapital))
+               {
+                   otherLocations += "<td style='border:none'><a href='" + Url.SchoolsLocalityAction(town.City.Name, town.Name, town.Id) + "'>Colegios en " + @town.Name + "&nbsp;&nbsp;<img alt='Web' width='10' height='15' src=" + Url.Content("/Content/themes/base/icons/iconmoreinfo.png") + "><img alt='Web' width='10' height='15' src=" + Url.Content("/Content/themes/base/icons/iconmoreinfo.png") + "></a></td></tr><tr>";
+                   cell = 0;
+               }
+               else if (town.Id != (int)TownEnum.MadridCapital)
+               {
+                   otherLocations += "<td style='border:none'><a href='" + Url.SchoolsLocalityAction(town.City.Name, town.Name, town.Id) + "'>Colegios en " + @town.Name + "&nbsp;&nbsp;<img alt='Web' width='10' height='15' src=" + Url.Content("/Content/themes/base/icons/iconmoreinfo.png") + "><img alt='Web' width='10' height='15' src=" + Url.Content("/Content/themes/base/icons/iconmoreinfo.png") + "></a></td>";
+                   cell += 1;
+               }
+           }
+       }
+       if (cell == 0)
+       {
+           otherLocations += "</tr>";
+       }
+
+       if (cell != 0)
+       {
+           for (var index = cell; index < 2; index++)
+           {
+               otherLocations += "<td style='border:none'>&nbsp;</td>";
+           }
+           otherLocations += "</tr>";
+       }
+
+       otherLocations += "</table>";
+            @Html.Raw(otherLocations);
+   }
+    
+    </div>
+
+</div>
+
+
+<script src="@Url.Content("~/Scripts/coles/search.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/maps/googleApi.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/contact/opinion.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+    var options = {
+        Elements:  {
+            eldistrict: $('#distrito'),
+            ellocality: $('input[type=checkbox][id=locality]'),
+            hiddenlocation: $('#Locations'),
+            town: $("#TownId")                 
+        },
+        CityId: '@Model.IndexModel.SearchModel.CityId',
+        AllEducationTypes: @Html.Raw(Model.IndexModel.BaseModel.EducationTypes.ToJson()),
+        AllCities: @Html.Raw(Model.IndexModel.BaseModel.Cities.ToJson()),
+        AllTowns: @Html.Raw(Model.IndexModel.BaseModel.Towns.ToJson()),
+        AllDistricts: @Html.Raw(Model.IndexModel.BaseModel.Districts.ToJson()),
+        SelectedDistricts: @Html.Raw((Model.IndexModel.SearchModel.Locations != null) ? Model.IndexModel.SearchModel.Locations.Split(',').ToArray().ToJson() : "{}"),
+        TownId: '@Model.IndexModel.SearchModel.TownId',
+        EducationType: '@Model.IndexModel.SearchModel.EducationTypeId',
+        District: ko.observable(),
+        MapOptions: {
+            latitude: 40.444302,
+            longitude: -3.652793
+        },
+        TabSelected: 'Colegios'
+    };
+
+    colesearch.init(options, mapgoogle);
+
+</script>

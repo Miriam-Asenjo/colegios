@@ -1,0 +1,43 @@
+﻿@using Colegios.Web.Areas.Blog.Models
+@model TopicsViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+@section Seo {
+    <title>@Model.Topic.PageTitle</title>  
+    <meta name="description" content="@Model.Topic.MetaDescription" />
+    <meta name="keywords" content="@Model.Topic.MetaKeywords" />  
+}
+
+@section Styles {
+    <link href="@Url.Content("~/Content/Home.css")" rel="stylesheet" type="text/css" /> 
+    <link href="@Url.Content("~/Content/Blog.css")" rel="stylesheet" type="text/css" /> 
+}
+
+@Html.Action("Index", "Opinion")
+
+<div class="blogContent">
+    @Html.Action("RightMenu", "Home", new { area="Blog" })
+@foreach (var post in Model.Posts)
+{
+    <article class="postContent">
+        <h3><a href="@post.Url" class="postTitleLink">@post.Title</a></h3>
+        <div>
+            @Html.Raw(post.Introduction)
+        </div>
+    </article>  
+}
+
+<script src="@Url.Content("~/Scripts/blog/blog.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/contact/opinion.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+    var options = {
+        TabSelected: 'Blogs',
+        TopicSelected: '@Model.Topic.Name'
+    };
+
+    blog.init(options);
+
+</script>

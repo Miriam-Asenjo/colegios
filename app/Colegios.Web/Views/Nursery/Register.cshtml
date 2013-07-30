@@ -1,0 +1,280 @@
+﻿@using Colegios.Web.Models
+@using Colegios.Web.Utils
+@using Colegios.Web.Infrastructure;
+
+@model NurseryRegistrationViewModel
+@section Seo {}          
+
+@section Styles {
+    <link href="@Url.Content("~/Content/Nursery.css")" rel="stylesheet" type="text/css" />
+}
+
+<div class="registrationContainer">
+
+    <h2 class="stepHeader">>> Informaci&oacute;n Usuario</h2>
+    @using (Html.BeginForm("signup", "nursery", FormMethod.Post, new { id = "signUpForm" }))
+    {
+        if (!string.IsNullOrEmpty(ViewBag.ErrorMsg)) { 
+            <div class="errorContainer">
+                @ViewBag.ErrorMsg
+            </div>
+        }
+
+        <div id="accountDetails">
+            <div class="registerinfo">
+                <p>Crea tu cuenta personal en coles y guardes desde dónde podrás administrar tu centro</p> 
+            </div>
+
+            @Html.HiddenFor(x=> x.Registration.UserId)
+            <div class="row">
+                @Html.LabelFor(x=> x.Registration.UserName)
+                <div class="value">
+                    @Html.TextBoxFor(x=> x.Registration.UserName)
+                    @Html.ValidationMessageFor(x=> x.Registration.UserName)
+                </div>
+            
+            </div>
+
+            <div class="row">
+                @Html.LabelFor(x => x.Registration.Email)
+                <div class="value">
+                    @Html.TextBoxFor(x => x.Registration.Email, new { @class = "long_txt" })
+                    @Html.ValidationMessageFor(x => x.Registration.Email)
+                </div>
+            </div>
+
+            <div class="row">
+                @Html.LabelFor(x => x.Registration.Password)
+                <div class="value">
+                    @Html.PasswordFor(x => x.Registration.Password, new { @class = "long_txt" })
+                    @Html.ValidationMessageFor(x => x.Registration.Password)
+                </div>
+            </div>
+
+            <div class="row">
+                @Html.LabelFor(x => x.Registration.ConfirmPassword)
+                <div class="value">
+                    @Html.PasswordFor(x => x.Registration.ConfirmPassword, new { @class = "long_txt" })
+                    @Html.ValidationMessageFor(x => x.Registration.ConfirmPassword)
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="value clearfix">
+                
+                    <a data-bind="click:continueAccount" class="continueBtn">Continuar</a>
+            
+                </div>
+                
+            </div>
+        </div>
+        <h2 class="stepHeader">>> Informaci&oacute;n b&aacute;sica Escuela Infantil</h2>
+        <div id="commonDetails" style="@(Model.Institution != null ? "display:block" : "display:none")">
+            <div class="registerinfo">
+                <p>Nombre, dirección y otros datos de contacto </p> 
+            </div>        
+            <div class="row">
+                @Html.LabelFor(x => x.Institution.Name)
+                <div class="value">
+                    @Html.TextBoxFor(x => x.Institution.Name, new { @class = "xxl_txt" })
+                    @Html.ValidationMessageFor(x => x.Institution.Name)
+                </div>
+            </div>
+
+            <div class="row">
+                @Html.LabelFor(x => x.Institution.EducationType)
+                <div class="value">
+                    @Html.DropDownListExtFor(x => x.Institution.EducationType,
+                    Model.BaseModel.EducationTypes.Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }), null, null)                 
+                </div>
+            </div>
+
+            <div class="row">
+                @Html.LabelFor(x => x.Institution.Address)
+                <div class="value">
+                    @Html.TextBoxFor(x => x.Institution.Address, new { @class = "xxl_txt" })
+                    @Html.LabelFor(x => x.Institution.Postcode)
+                    @Html.TextBoxFor(x => x.Institution.Postcode, new { @class = "small" })
+                </div>
+                <div class="value">
+                    @Html.ValidationMessageFor(x => x.Institution.Address)
+                    @Html.ValidationMessageFor(x => x.Institution.Postcode)
+                </div>                
+            </div>
+
+            <div class="row">
+            
+                @Html.LabelFor(x => x.Institution.City)
+                <div class="value">
+                    @{var cities = new List<SelectListItem>();
+                      cities.AddRange(Model.BaseModel.Cities.Select(y => new SelectListItem() { Value = y.Id.ToString(), Text = y.Name }).ToList());
+                      @Html.DropDownListExtFor(x => x.Institution.City, cities, "Seleccione una ciudad", new Dictionary<string, object>() { { "data-bind", "value: city" } });
+                     } 
+                     @Html.LabelFor(x => x.Institution.Town)
+                     @Html.DropDownListExtFor(x=> x.Institution.Town, new List<SelectListItem>(), "Seleccione un municipio", new Dictionary<string, object>()  {{"data-bind","options: towns, optionsText: 'Name', optionsValue: 'Id', value: town"}})
+                </div>
+                <div class="value">
+                     @Html.ValidationMessageFor(x=> x.Institution.City)    
+                     @Html.ValidationMessageFor(x=> x.Institution.Town)                                                                                         
+                </div>
+            
+            </div>
+
+            <div class="row" id="districts" style="display:none">
+                @Html.LabelFor(x=> x.Institution.District)
+                <div class="value">
+                    @Html.DropDownListExtFor(x=> x.Institution.District, new List<SelectListItem>(), "Seleccione un distrito", new Dictionary<string, object>()  {{"data-bind","options: districts, optionsText: 'Name', optionsValue: 'Id'"}})
+                    @Html.ValidationMessageFor(x=> x.Institution.District)
+                </div>
+            </div>
+
+            <div class="row">
+            
+                @Html.LabelFor(x => x.Institution.FirstPhone)
+                <div class="value">
+                    @Html.TextBoxFor(x => x.Institution.FirstPhone, new { @class = "small" })
+                    @Html.LabelFor(x=> x.Institution.Fax)
+                    @Html.TextBoxFor(x=> x.Institution.Fax, new {@class="small"})
+                </div>
+                <div class="value">   
+                    @Html.ValidationMessageFor(x=> x.Institution.FirstPhone)
+                    @Html.ValidationMessageFor(x=> x.Institution.Fax)
+                </div>    
+            
+            </div>
+
+            <div class="row">
+                @Html.LabelFor(x=> x.Institution.Email)
+                <div class="value">
+                    @Html.TextBoxFor(x=> x.Institution.Email, new {@class="long_txt"})
+                    @Html.ValidationMessageFor(x=> x.Institution.Email)
+                </div>
+            
+            </div>
+
+            <div class="row">
+                
+                @Html.LabelFor(x=> x.Institution.WebSite)
+                <div class="value">
+                
+                    @Html.TextBoxFor(x=> x.Institution.WebSite, new {@class="long_txt"})
+                    @Html.ValidationMessageFor(x=> x.Institution.WebSite)                   
+                
+                </div>
+            
+            </div>
+
+            <div class="row">
+                <div class="value">
+                
+                    <a data-bind="click:continueBasicInfo" class="continueBtn">Continuar</a>
+            
+                </div>
+                
+            </div>
+        </div>
+        <h2 class="stepHeader">>> Caracter&iacute;sticas Escuela Infantil</h2>
+        <div id="specificDetails" style="@(Model.CategoryDetails != null ? "display:block" : "display:none")">
+
+            @{var index = 0;}
+            @foreach (var category in Model.Categories)
+            {                var htmlCategory = String.Empty;
+            htmlCategory = "<div class='registerinfo' style='width:300px;font-size:16px;margin-top:5px'><p>" + @category.Name + "</p></div>";
+
+                
+                var categoryFieldName = String.Empty;
+                var isFieldSet = false;
+                var fieldValue = String.Empty;
+                var sameCategoryField = 0;
+                foreach (var categoryField in category.Fields)
+                {
+                    
+                    if (!categoryFieldName.Equals(categoryField.Name))
+                    {
+                        if (!String.IsNullOrEmpty(htmlCategory) && sameCategoryField == 2)
+                        {
+                            htmlCategory += "</fieldset>";
+                            isFieldSet = true;
+                            sameCategoryField = 0;
+                        }
+                        
+                        htmlCategory += !String.IsNullOrEmpty(htmlCategory) && sameCategoryField == 2 ? "</fieldset>" : "";
+                        //categoryFieldName = (String.IsNullOrEmpty(categoryField.Name)) ? String.Empty : categoryField.Name;
+                        if (!String.IsNullOrEmpty(categoryField.Name))
+                        {
+                            htmlCategory += "<fieldset><legend>" + categoryField.Name + "</legend>";
+                            isFieldSet = true;
+                        }
+                        else if (String.IsNullOrEmpty(categoryField.Name) && sameCategoryField == 0) { sameCategoryField = 1; htmlCategory += "<fieldset>"; }
+                    }
+                    else {
+                        sameCategoryField = 2;
+                    }
+                    categoryFieldName = (String.IsNullOrEmpty(categoryField.Name)) ? String.Empty : categoryField.Name;
+                    fieldValue = (Model.CategoryDetails != null) ? Model.CategoryDetails.Where(x => x.CategoryFieldId == categoryField.Id).Select(x=> x.Value).SingleOrDefault(): "";
+                    
+                    htmlCategory += "<div class='row'><label>" + @categoryField.Description + "</label>" 
+                                     + "<div class='value'>";
+
+                    htmlCategory += "<input type='hidden' name='CategoryDetails[" + index + "].CategoryFieldId' id='CategoryDetails_" + index + "__CategoryFieldId' value=" + @categoryField.Id + " />";
+                    
+                    if(categoryField.Mandatory){
+                        htmlCategory += "<textarea name='CategoryDetails[" + index + "].Value' id='CategoryDetails_" + index + "__Value' rows=1 data-val='true' data-val-required='El campo " + @categoryField.Description + " es obligatorio' class='" + ((ViewContext.ViewData.ModelState.Count() > 0 && ViewContext.ViewData.ModelState["CategoryDetails[" + index + "].Value"].Errors.Count() >= 1) ? "input-validation-error" : "valid") + "'>" + (String.IsNullOrEmpty(fieldValue) ? "" : fieldValue) + "</textarea></div></div>";
+                    }else {
+                        htmlCategory += "<textarea name='CategoryDetails[" + index + "].Value' id=CategoryDetails_" + index + "__Value' rows=1 data-val='true' value='" + (String.IsNullOrEmpty(fieldValue) ? "" : fieldValue) + " class='" + ((ViewContext.ViewData.ModelState.Count() > 0 && ViewContext.ViewData.ModelState["CategoryDetails[" + index + "].Value"].Errors.Count() >= 1) ? "input-validation-error" : "valid") + "'>" + (String.IsNullOrEmpty(fieldValue) ? "" : fieldValue) + "</textarea></div></div>";
+                    }
+
+                    if (ViewContext.ViewData.ModelState.Count() > 0 && ViewContext.ViewData.ModelState["CategoryDetails[" + index + "].Value"].Errors.Count() >= 1)
+                    {
+                        htmlCategory += "<span class='field-validation-error' data-valmsg-for='CategoryDetails[" + index + "].Value' data-valmsg-replace='true'>";
+                        htmlCategory += "<span for='" + "CategoryDetails_" + index + "__Value' generated='true'>El campo " + @categoryField.Description + " es obligatorio.</span></span>";   
+                    }
+                    else
+                    {
+                        htmlCategory += "<span class='field-validation-valid' data-valmsg-for='CategoryDetails[" + index + "].Value' data-valmsg-replace='true'></span>";
+                    } 
+                    index++;
+                }
+
+                //if (isFieldSet)
+                //{
+                    htmlCategory += "</fieldset>";
+                //}
+
+                @Html.Raw(htmlCategory)  
+            }
+
+            <div class="row">
+                <div class="value">
+                
+                    <a class="continueBtn" data-bind="click:continueDetailInfo" >Continuar</a>
+            
+                </div>
+                
+            </div>
+
+        </div>
+    }
+
+</div>
+
+<script src="@Url.Content("~/Scripts/register/register.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+    var options = {
+        
+        form: $("#signUpForm"),
+        basicInfo: $("#commonDetails"),
+        detailInfo: $("#specificDetails"),
+        AllCities: @Html.Raw(Model.BaseModel.Cities.ToJson()),
+        AllTowns: @Html.Raw(Model.BaseModel.Towns.ToJson()),
+        AllDistricts: @Html.Raw(Model.BaseModel.Districts.ToJson()),
+        //CityId: '@Model.BaseModel.Cities.First().Id',
+        CityId: null,
+
+    }
+
+    register.init(options);
+
+
+</script>

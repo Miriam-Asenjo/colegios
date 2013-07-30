@@ -1,0 +1,45 @@
+﻿@using System.Configuration;
+@using Colegios.Web.Models
+@model OpinionModel
+           
+<!-- adding feedback -->
+@if (ConfigurationManager.AppSettings["feedBackEnabled"] == "true")
+{
+    
+    <div id="dialog-message" title="Download complete" style="display:none">
+	    <p>
+		    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+		    Your files have downloaded successfully into the My Downloads folder.
+	    </p>
+    </div>
+    
+    <div class="feedback" data-bind="click:openDialog">  
+<p class="css-vertical-text">Danos tu Opini&oacute;n</p>
+    </div>
+
+    <div id="dialogOpinion" style="display:none;" title="Queremos mejorar, danos tu opinión">
+        @using (Html.BeginForm("RegisterOpinion", "Opinion", FormMethod.Post, new { id = "opinionForm" }))
+        {
+            @Html.ValidationSummary()
+            <div class="opinionRow">
+                @Html.LabelFor(x => x.Name)<span>*</span>
+                @Html.TextBoxFor(x => x.Name)
+            </div>
+
+            <div class="opinionRow">
+                @Html.LabelFor(x => x.Email)
+                @Html.TextBoxFor(x => x.Email)
+            </div>
+            <div class="opinionRow">
+                @Html.LabelFor(x => x.Opinion)<span>*</span>
+                @Html.EditorFor(x => x.Opinion)
+            </div>
+            <div>
+                <center>@ReCaptcha.GetHtml(ConfigurationManager.AppSettings["ReCaptcha.PublicKey"], "white")</center>
+            </div>
+            <div>
+                <input type="submit" value="Enviar"/>
+            </div>
+        }
+    </div>
+}

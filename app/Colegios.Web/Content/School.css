@@ -1,0 +1,65 @@
+﻿.schoolDetails 
+{
+    float:left;
+    width: 100%;
+    padding: 10px 0px 20px 10px;
+    margin: 10px 0px 10px 0px;
+    background-image: url("themes/base/images/schools/schoolBaseDetails2.png");
+    background-repeat:repeat;
+    border: 2px solid #BCBCBE;
+    border-radius: 15px;
+    -moz-border-radius: 15px 15px 15px 15px;
+    height: auto;
+}
+
+.schoolDetails h5 {
+    margin: 10px 0px 4px 10px;
+    color: #4B4B4D;
+    width: 200px;
+}
+
+
+.blockLeft 
+{
+    width: 52%;
+    float: left;
+}
+
+.blockRight 
+{
+    width: 48%;
+    float:right;
+}
+
+.additionalDetails
+{
+    clear:both;
+    width: 100%;
+    float:left;
+    height: auto;
+}
+
+.districtMarks
+{
+    width: 60%;
+    float: right;
+    height: auto;
+    padding-right: 10px;
+}
+
+.schoolMarks 
+{
+   width: 38%;
+   float: left; 
+   height: 200px;
+   height: auto;
+}
+
+.map_locations 
+{
+    float:left;
+    display: block;
+    width: 620px;
+    height: 380px;
+}
+

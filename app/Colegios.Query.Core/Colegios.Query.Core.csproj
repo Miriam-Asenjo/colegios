@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{813ABAC1-30B9-4B79-8DD2-9F0306D1AEE6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Colegios.Query.Core</RootNamespace>
+    <AssemblyName>Colegios.Query.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Criteria\NurseryCriteria.cs" />
+    <Compile Include="Criteria\SchoolCriteria.cs" />
+    <Compile Include="DTOs\CategoryDto.cs" />
+    <Compile Include="DTOs\CategoryFieldDto.cs" />
+    <Compile Include="DTOs\CategoryFieldInstitutionTypeDto.cs" />
+    <Compile Include="DTOs\CityDto.cs" />
+    <Compile Include="DTOs\EducationTypeDto.cs" />
+    <Compile Include="DTOs\HighLightNurseryDto.cs" />
+    <Compile Include="DTOs\HighLightSchoolDto.cs" />
+    <Compile Include="DTOs\LocalityDto.cs" />
+    <Compile Include="DTOs\LocalityTypeDto.cs" />
+    <Compile Include="DTOs\MarkDto.cs" />
+    <Compile Include="DTOs\MarkLeaDto.cs" />
+    <Compile Include="DTOs\NurseryDto.cs" />
+    <Compile Include="DTOs\NurseryDetailsDto.cs" />
+    <Compile Include="DTOs\NurseryLogDto.cs" />
+    <Compile Include="DTOs\NurseryModifiedDto.cs" />
+    <Compile Include="DTOs\NurseryDetailsModifiedDto.cs" />
+    <Compile Include="DTOs\NurseryPicDto.cs" />
+    <Compile Include="DTOs\PostReadDto.cs" />
+    <Compile Include="DTOs\SchoolDetailsDto.cs" />
+    <Compile Include="DTOs\SchoolDto.cs" />
+    <Compile Include="DTOs\SchoolPicDto.cs" />
+    <Compile Include="DTOs\TownDto.cs" />
+    <Compile Include="DTOs\UserDto.cs" />
+    <Compile Include="DTOs\UserOpinionDto.cs" />
+    <Compile Include="Entities\Lookups\InstitutionType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryInterfaces\IEducationQuery.cs" />
+    <Compile Include="QueryInterfaces\ILocationQuery.cs" />
+    <Compile Include="QueryInterfaces\INurseryQuery.cs" />
+    <Compile Include="QueryInterfaces\IOpinionQuery.cs" />
+    <Compile Include="QueryInterfaces\IPostQuery.cs" />
+    <Compile Include="QueryInterfaces\ISchoolQuery.cs" />
+    <Compile Include="QueryInterfaces\IUserQuery.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ValueObjects\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

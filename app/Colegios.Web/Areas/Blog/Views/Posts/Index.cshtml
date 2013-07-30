@@ -1,0 +1,70 @@
+﻿@using Colegios.Web.Areas.Blog.Models
+@using System.Globalization
+@model BlogViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+@section Seo {
+
+}
+
+@section Styles{
+    <link href="@Url.Content("~/Content/Home.css")" rel="stylesheet" type="text/css" /> 
+    <link href="@Url.Content("~/Content/Blog.css")" rel="stylesheet" type="text/css" /> 
+}
+
+@Html.Action("Index", "Opinion", new { area = "" })
+
+<div class="blogContent">
+    @Html.Action("RightMenu", "Home", new { area = "blog" })
+    @{ var month = String.Empty;}
+    @foreach (var post in Model.Posts)
+    {
+
+        if (!month.Equals(((DateTime)post.Published).ToString("MMMM", new CultureInfo("es-ES"))))
+        {
+            <header class="postHeader">
+                @{month = ((DateTime)post.Published).ToString("MMMM", new CultureInfo("es-ES"));}
+                <img src="@Url.Content("~/Content/themes/base/icons/bookmark.png")" class="iconMonth" width="140" height="55" align="left"/>
+                <span class="postMonth">@month</span>
+            </header>
+        }
+        <article class="postContent">
+            <h3><a href="@post.Url" class="postTitleLink">@post.Title</a></h3>
+            <div style="margin-bottom:10px">
+                @Html.Raw(post.Introduction)
+            </div>
+        </article>
+    }
+    
+    
+    <div>
+        @if (Model.PreviousPage != null)
+        {
+            <a href="@Url.Action("Index", "Posts", new { Area = "Blog", pageNo = Model.PreviousPage })">Anterior</a>
+            <img src="@Url.Content("/Content/themes/base/icons/iconlessinfo.png")" style="margin-right: -8px" />
+            <img src="@Url.Content("/Content/themes/base/icons/iconlessinfo.png")" />
+            <span>&nbsp;&nbsp;</span>
+        }
+        @if (Model.NextPage != null)
+        {
+            <img src="@Url.Content("/Content/themes/base/icons/iconmoreinfo.png")" style="margin-right: -8px" />
+            <img src="@Url.Content("/Content/themes/base/icons/iconmoreinfo.png")" />
+            <a href="@Url.Action("Index", "Posts", new { Area = "Blog", pageNo = Model.NextPage })">Siguiente</a>
+        }
+    </div>
+    
+</div>
+
+<script src="@Url.Content("~/Scripts/blog/blog.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/contact/opinion.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+    var options = {
+        TabSelected: 'Blogs'
+    };
+
+    blog.init(options);
+
+</script>

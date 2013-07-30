@@ -1,0 +1,69 @@
+﻿@using System.Collections;
+@using Colegios.Web.Models;
+
+@model SchoolSearchViewModel
+
+<div id="searchForm">
+ <img id="minimizeSearchForm" src="@Url.Content("/Content/themes/base/icons/closeForm.png")" width="35px" height="35px" alt="Minimizar" style="position:absolute;right:0;margin-right:-30px;margin-top:-20px" data-bind="click: minimizeSearch"/>
+@using (Html.BeginForm("search","school",FormMethod.Post)){
+    <div class="rowlarge">
+        @Html.LabelFor(x => x.Name)
+        @Html.TextBoxFor(x => x.Name)
+        <img name="expandSearchForm" alt="Web" width="20" height="35" src="@Url.Content("/Content/themes/base/icons/iconmoreinfo.png")" style="display:none;" align="right" data-bind="click:maximizeSearch"/>
+        <img name="expandSearchForm" alt="Web" width="20" height="35" src="@Url.Content("/Content/themes/base/icons/iconmoreinfo.png")" style="display:none;" align="right" data-bind="click:maximizeSearch"/>
+        <span class="expandSearchForm" style="display:none" data-bind="click:maximizeSearch">Ampliar &nbsp;&nbsp;</span>
+    </div>
+
+    <div class="row" >
+        @Html.LabelFor(x=> x.CityId)
+        @Html.DropDownListFor(x => x.CityId, new SelectList(new ArrayList()), new Dictionary<string, object>() { { "data-bind", "options: allCities, optionsText: 'Name', optionsValue: 'Id', value: city" }, { "class", "selectCity" } })
+        @Html.ValidationMessageFor(x => x.CityId)    
+        @Html.LabelFor(x=> x.TownId)
+        @Html.DropDownListFor(x=> x.TownId,new SelectList(new ArrayList()),new Dictionary<string, object>() {{"data-bind","options: towns, optionsText: 'Name', optionsValue: 'Id', value: town"}, {"class","selectTown"}})
+        @Html.ValidationMessageFor(x => x.TownId)
+        @Html.HiddenFor(x => x.Locations)
+  
+    </div>
+    <div id="distrito" data-bind='template: "districtTemplate", visible:districts().length > 0' style="display:none"></div>
+    <div class="row">
+        @Html.LabelFor(x=> x.EducationTypeId)
+        @Html.DropDownListFor(x => x.EducationTypeId, new SelectList(new ArrayList()), new Dictionary<string, object>() { { "data-bind", "options: allEducationTypes, optionsText: 'Name', optionsValue: 'Id',value: educationType, optionsCaption: 'Elige un tipo de centro...'" } })
+        
+        @Html.LabelFor(x => x.IsBilingual)
+        @Html.CheckBoxFor(x => x.IsBilingual)
+
+    </div>
+    
+    <div class="row">
+        @Html.LabelFor(x=> x.NoBreak)
+        @Html.CheckBoxFor(x=> x.NoBreak)
+    </div>
+    
+
+    <div class="row">
+        <input type="submit" value="Busquemos Coles" class="btn_search"/>
+    </div>
+    
+}
+
+</div>
+
+
+
+<script id='districtTemplate' type='text/html'>
+    <div>Elige distrito(s)</div>
+    <div class="comic"></div>
+    {{each districts()}}
+      {{if ($index%7 == 0) && ($index > 0)}}
+        </ul><ul>
+      {{/if}}
+      {{if ($index == 0)}}
+        <ul>
+      {{/if}}
+      <li><input type="checkbox" value="${$value.Id}" id="locality" name="locality">${$value.Name}</li>
+      {{if ($index == districts.length -1)}}
+        </ul>
+      {{/if}}
+    {{/each}}
+
+</script>

@@ -1,0 +1,173 @@
+﻿@using Colegios.Web.Infrastructure;
+@using Colegios.Query.Core.DTOs;
+@using Colegios.Web.Enums;
+@model NurseryDto 
+
+@{
+    var highLighted = (bool)ViewData["highLighted"];
+    var logoName = (string)ViewData["logoName"];
+
+}
+
+<div style="width: 100%; float:left; margin-bottom: 20px; @(highLighted==false ? "border-bottom: 3px solid #47A5F4":"")">
+    <article>
+        @if (highLighted == false)
+        {
+            
+            var logo= string.Empty;
+            if ((Model.HighLightedNursery != null) && (Model.HighLightedNursery.Any()))
+            {
+                var highLightedNursery = Model.HighLightedNursery.Where(x => x.StartDate <= DateTime.Now && x.EndDate >= DateTime.Now).FirstOrDefault();
+                if (highLightedNursery != null)
+                {
+                    logo = highLightedNursery.LogoName;
+                }
+            }
+
+            if (string.IsNullOrEmpty(logo))
+            { 
+                <div style="float:left; width: 18%">
+                    <img width="160" height="160" src="@Url.Content("/Content/themes/base/images/schools/schoolItem1.jpg")" />
+                </div>
+            }
+            else
+            {
+                <div style="float:left; width: 18%">
+                    <div style="width:160px;height:160px; position:relative;">
+                        <img style="position:absolute;top:0;bottom:0;margin:auto;left:0;right:0" src="@Url.Content("/Images/Nurseries/" + logo)" />
+                    </div>
+                </div> 
+            } 
+
+        }
+        <div id="@String.Concat("showBlock", Model.Id)" style="display:none" class="infoContainer">
+            <img class="closeCross" src="@Url.Content("/Content/themes/base/images/common/cross.png")" data-bind="click: function() { hideBlock(@Model.Id)}" /> 
+            <!-- google maps -->
+            <div id="@String.Concat("map_canvas", Model.Id)" class="map" style="display:none"></div>
+        </div>
+
+        <div class="baseDetails" style="@((highLighted == null || highLighted == false) ? "" : "margin:-12px auto 0px auto;float:none;background-image: url(\"/Content/themes/base/images/schools/schoolBaseDetails2.png\");border:5px solid #D4A017")">
+            <div class="schoolLinks">
+                <img alt="Localizacion" title="Localizacion" width="36" height="36" align="right" data-bind="click: function() { showBlock(@Model.Id, @Model.Latitude, @Model.Longitude)}" src="@Url.Content("/Content/themes/base/icons/google_map.png")" />
+                @if (Model.Locality.Town.Id == (int)TownEnum.MadridCapital) { 
+                    <a href="@Url.NurseryDetailsAction(Model.Name, Model.Id)"><img alt="Ficha Detallada" title="Ficha Detallada" align="right" width="36" height="36" src="@Url.Content("/Content/themes/base/icons/document_properties.png")" style="border:0" /></a>
+                }else {
+                    <a href="@Url.NurseryDetailsByLocalityAction(Model.Locality.Town.City.Name,Model.Locality.Town.Name, Model.Name, Model.Id)"><img alt="Ficha Detallada" title="Ficha Detallada" align="right" width="36" height="36" src="@Url.Content("/Content/themes/base/icons/document_properties.png")" style="border:0" /></a>   
+                }
+            </div>
+            @if (Model.Locality.Town.Id == (int)TownEnum.MadridCapital) { 
+                <a href="@Url.NurseryDetailsAction(Model.Name, Model.Id)"><h3 class="schoolTitle">@Model.Name</h3></a>
+            }else {
+                <a href="@Url.NurseryDetailsByLocalityAction(Model.Locality.Town.City.Name,Model.Locality.Town.Name, Model.Name, Model.Id)"><h3 class="schoolTitle">@Model.Name</h3></a>
+            }
+            <span style="float:right; margin-top: -40px; margin-right: 190px; font-size: 18px; font-weight: bold">
+                    @if (Model.Type.Name.Equals("Público"))
+                    { 
+                        <img alt="SchoolType" width="20" height="20" src="@Url.Content("/Content/themes/base/icons/publico.png")" />@Model.Type.Name
+                    }
+                    @if (Model.Type.Name.Equals("Madre de Día"))
+                    { 
+                        <img alt="SchoolType" width="20" height="20" src="@Url.Content("/Content/themes/base/icons/concertado.png")" />@Model.Type.Name
+                    }  
+                    @if (Model.Type.Name.Equals("Privado"))
+                    { 
+                        <img alt="SchoolType" width="20" height="20" src="@Url.Content("/Content/themes/base/icons/privado.png")" />@Model.Type.Name
+                    }   
+            </span>
+            @if (highLighted && (!string.IsNullOrEmpty(logoName)))
+            {
+                <div style="float:left;width:150px; height:100%;position:absolute">  
+                    <center><img alt="string.Format('{0}-Logo',@Model.Name)" src="@Url.Content("/Images/Nurseries/" + logoName)" /></center>
+                </div>               
+            }
+@*                    @if ((Boolean.Parse(ConfigurationManager.AppSettings["showOpenDays"])) && (!String.IsNullOrEmpty(nursery.OpenDay))) { 
+                <div style="margin-bottom:10px;margin-top:10px;overflow:hidden;padding-top:10px">
+                    <span class="puertasAbiertas" style="margin-top:40px; height:30px">Puertas Abiertas: @school.OpenDay</span>
+                    <img src="@Url.Content("/Content/themes/base/icons/opendoors.png")" width="30" height="35" align="left" style="margin-top:-5px"/>
+                </div>
+            }*@
+            <ul class="baseInfo" style="@(highLighted ? "margin-left:190px" : "")">
+                <li><img alt="Phone" width="20" height="20" src="@Url.Content("/Content/themes/base/icons/address.png")" /> @Model.Address, CP: @Model.PostCode. @Model.Locality.Name, @(Model.Locality.Type.Id != 3 ? Model.Locality.Town.Name : "")</li>
+                @if (!highLighted)
+                { 
+                    <li>
+                        @if (!String.IsNullOrEmpty(Model.Phone))
+                        { 
+                            <img alt="Phone" width="20" height="20" src="@Url.Content("/Content/themes/base/icons/phone.png")" /> @Model.Phone 
+                        }
+                        @if (!String.IsNullOrEmpty(Model.Fax))
+                        { 
+                            <img alt="Fax" width="20" height="20" src="@Url.Content("/Content/themes/base/icons/fax.png")" /> @Model.Fax
+                        }
+                    </li>
+                        if (!String.IsNullOrEmpty(Model.Email))
+                        { 
+                        <li>
+                            <img alt="Email" width="20" height="20" src="@Url.Content("/Content/themes/base/icons/contact_email.png")" /> @Model.Email
+                        </li>
+                        }
+                        if (!String.IsNullOrEmpty(Model.Web))
+                        { 
+                        <li>
+                            <img alt="Web" width="20" height="20" src="@Url.Content("/Content/themes/base/icons/world_link.png")" /><a href="http://@Model.Web" style="text-decoration:none,color:#99CC66" target="_blank"> @Model.Web</a>
+                        </li>
+                        }
+                }
+                else
+                { 
+                    <li>
+                        @if (!String.IsNullOrEmpty(Model.Phone))
+                        { 
+                            <img alt="Phone" width="20" height="20" src="@Url.Content("/Content/themes/base/icons/phone.png")" /> @Model.Phone 
+                        }
+                        @if (!String.IsNullOrEmpty(Model.Fax))
+                        { 
+                            <img alt="Fax" width="20" height="20" src="@Url.Content("/Content/themes/base/icons/fax.png")" /> @Model.Fax
+                        }
+                        @if (!String.IsNullOrEmpty(Model.Email))
+                        { 
+                            <img alt="Email" width="20" height="20" src="@Url.Content("/Content/themes/base/icons/contact_email.png")" /> @Model.Email
+                        }                    
+                        @if (!String.IsNullOrEmpty(Model.Web))
+                        { 
+                            <img alt="Web" width="20" height="20" src="@Url.Content("/Content/themes/base/icons/world_link.png")" /><a href="http://@Model.Web" style="text-decoration:none,color:#99CC66" target="_blank"> @Model.Web</a>
+                        }                    
+                    </li>
+                
+                }
+            </ul>
+        @{
+            var details = Model.Details.OrderBy(x => x.CategoryField.Id).GroupBy(x => new { ParentCategory = x.CategoryField.Category.Name, SubCategory = x.CategoryField.Name }).ToDictionary(x => x.Key);
+            var parentCategory = String.Empty;
+            foreach (var prop in details)
+            {
+                if (!prop.Key.ParentCategory.Equals(parentCategory))
+                { 
+                    <h5 id="left" style="@(string.IsNullOrEmpty(logoName) ? "" : "margin-left:205px")"><a name="linkCategoryInfo" data-bind="click: function () {showHideSection ('@prop.Key.ParentCategory.Replace(" ", "")',@Model.Id);}">@prop.Key.ParentCategory &nbsp;&nbsp;&nbsp;<img alt="Web" width="10" height="15" src="@Url.Content("/Content/themes/base/icons/iconmoreinfo.png")"/><img alt="Web" width="10" height="15" src="@Url.Content("/Content/themes/base/icons/iconmoreinfo.png")"/></a></h5> 
+                    parentCategory = prop.Key.ParentCategory;
+                }
+                if (!String.IsNullOrEmpty(prop.Key.SubCategory))
+                { 
+                            
+                    <span class="categoryField" id="@String.Concat("categoryField", prop.Key.ParentCategory.Replace(" ", ""), Model.Id)" style="@(string.IsNullOrEmpty(logoName) ? "display:none" : "margin-left:215px;display:none")">@prop.Key.SubCategory</span>
+                }
+                <ul class="categoryFieldDetails" name="@String.Concat("categoryFieldDetails", prop.Key.ParentCategory.Replace(" ", ""), Model.Id)" style="@(string.IsNullOrEmpty(logoName) ? "display:none" : "margin-left:195px;display:none")">
+                        
+                @foreach (var val in prop.Value)
+                { 
+                    <li>@val.CategoryField.Description - <span class="categoryValue">@val.Value</span></li>
+                }
+                    
+                </ul>
+            }
+        } 
+        @if (!string.IsNullOrEmpty(logoName))
+        { 
+                 <span style="position:absolute; bottom:0px;margin-left:-14px;margin-bottom:-9px"> 
+                    <img alt="Email" src="@Url.Content("/Content/themes/base/images/schools/highLightedBandage.png")" />
+                 </span> 
+        }
+        </div>
+    </article>
+</div>
+

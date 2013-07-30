@@ -1,0 +1,55 @@
+﻿@using System.Globalization
+@using Colegios.Web.Areas.Blog.Models
+@model PostViewModel
+
+@section Seo {
+    <title>@Model.Post.PageTitle</title>
+    <meta name="description" content="@Model.Post.MetaDescription" />
+    <meta name="keywords" content="@Model.Post.MetaKeywords" />
+}
+
+@section Styles {
+    <link href="@Url.Content("~/Content/Home.css")" rel="stylesheet" type="text/css" /> 
+    <link href="@Url.Content("~/Content/Blog.css")" rel="stylesheet" type="text/css" />
+} 
+
+@Html.Action("Index", "Opinion")
+
+<div class="blogContent">
+
+    @Html.Action("RightMenu", "Home", new { area = "Blog" })
+
+    <article class="postArticle">
+        <img src="@Url.Content("~/Content/themes/base/icons/bookmark.png")" class="iconDate" width="140" height="55" align="left"/>
+        <span class="postDate">@(((DateTime)Model.Post.Published).ToString("dd MMMM", new CultureInfo("es-ES")))</span>
+        <h3 class="postTitle">@Model.Post.Title</h3>
+        <div>
+            @Html.Raw(Model.Post.Body)
+        </div>
+
+        @if (Model.PostTopics.Any())
+        {
+            <img src="@Url.Content("~/Content/themes/base/icons/tag.png")"/>
+        }
+        <div class="topics">
+            @foreach (var topic in Model.PostTopics)
+            {
+                <span class="postTag"><a href="@topic.Url" target="_blank">@topic.Description</a></span>
+                <span>&nbsp;</span>
+            }
+        </div>
+
+    </article>
+</div>
+
+<script src="@Url.Content("~/Scripts/blog/blog.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/contact/opinion.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+    var options = {
+        TabSelected: 'Blogs'
+    };
+
+    blog.init(options);
+
+</script>

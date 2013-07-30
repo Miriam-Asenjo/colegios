@@ -1,0 +1,21 @@
+﻿@using Colegios.Web.CMS.Blog
+@model IEnumerable<TopicPage>
+@{
+    ViewBag.Title = "_Topics";
+}
+
+<div>
+    <ul class="topics">
+        @foreach (var topic in Model)
+        {
+            if (!string.IsNullOrEmpty(topic.Description))
+            { 
+                <li id="@topic.Name"><a href="@topic.Url">@topic.Description.ToUpper()</a>
+                    <img width="310"  id="unselected" src="@Url.Content("~/Content/themes/base/images/blog/category_unselected.png")" />
+                    <img width="310"  id="selected" src="@Url.Content("~/Content/themes/base/images/blog/category_selected.png")" style="display:none" />
+                </li>
+            }
+        }
+    </ul>
+    
+</div>

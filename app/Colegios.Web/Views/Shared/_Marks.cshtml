@@ -1,0 +1,32 @@
+﻿@using Colegios.Query.Core.DTOs
+
+@model IList<MarkDto>
+
+<table class="tableMarks">
+
+    <thead>
+        <tr>
+            <th scope="col">Nº Alumnos</th>
+            <th scope="col">Aprobados Lengua</th>
+            <th scope="col">Aprobados Mates</th>
+            <th scope="col">Aprobados Cultura</th>
+            <th scope="col">Nota Media</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var mark in Model) { 
+            <tr><th colspan=5 align="center">- @mark.YearExam -</th></tr> 
+            <tr>
+                <td>@mark.TotalStudents</td>
+                <td>@mark.LanguageTotalPercentageSuccess %</td>
+                <td>@mark.MathsTotalPercentageSuccess %</td>
+                <td>@mark.CultureTotalPercentageSuccess @(mark.CultureTotalPercentageSuccess== null ? "-" : "%")</td>
+                <td>@mark.AverageMark</td>
+            </tr>
+        
+        }
+    </tbody>
+
+</table>
+

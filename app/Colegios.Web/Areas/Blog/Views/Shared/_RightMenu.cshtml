@@ -1,0 +1,41 @@
+﻿@using Colegios.Web.Areas.Blog.Models
+@model BlogMenuViewModel
+@{
+    ViewBag.Title = "_Topics";
+}
+
+<div class="topics">
+    <ul class="topics">
+        @foreach (var topic in Model.Topics)
+        {
+            if (!string.IsNullOrEmpty(topic.Description))
+            { 
+                <li id="@topic.Name"><a href="@topic.Url">@topic.Description.ToUpper()</a>
+                    <img width="310"  id="unselected" src="@Url.Content("~/Content/themes/base/images/blog/category_unselected.png")" />
+                    <img width="310"  id="selected" src="@Url.Content("~/Content/themes/base/images/blog/category_selected.png")" style="display:none" />
+                </li>
+            }
+        }
+    </ul>
+
+    <ul class="banners">
+        
+        @foreach (var banner in Model.Banners) 
+        {
+            <li><a href="@banner.Link" target="_blank"><center><img src="@banner.Image"/></center></a></li> 
+        }
+    </ul>
+    
+    <h5 class="topPostsHeader">TOP 5 POSTS</h5>
+    
+
+    <ol class="topPosts">
+        
+        @foreach (var post in Model.Posts) 
+        {
+            <li><a href="@post.Url">@post.Title</a></li> 
+        }
+    </ol>
+
+</div>
+

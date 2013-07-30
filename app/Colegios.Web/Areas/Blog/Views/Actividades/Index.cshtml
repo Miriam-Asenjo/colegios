@@ -1,0 +1,86 @@
+﻿@using Colegios.Web.Areas.Blog.Models
+@using System.Globalization;
+@model ActivitiesViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+@section Seo {
+    <title>Blog de Coles y Guardes: Actividades</title>
+    <meta name="description" content="Las mejores actividades para niños para disfrutar en familia" >
+    <meta name="keywords" content="Actividades Infantiles, Actividades para niños, teatro infantil, cine infantil, museos, títeres, exposiciones para niños, planes con niños, viajes con niños, conciertos para niños" >
+}
+
+@section Styles {
+    <link href="@Url.Content("~/Content/Home.css")" rel="stylesheet" type="text/css" /> 
+    <link href="@Url.Content("~/Content/Blog.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/Activities.css")" rel="stylesheet" type="text/css" /> 
+}
+
+@Html.Action("Index", "Opinion", new { area = "" })
+
+<div class="blogContent">
+    @Html.Action("RightMenu", "Home", new { area = "blog", showActivities = false })
+    @{ var month = String.Empty;}
+    @foreach (var activity in Model.Activities)
+    {
+
+        if (!month.Equals(((DateTime)activity.StartDate).ToString("MMMM", new CultureInfo("es-ES"))))
+        {
+            <header class="activityHeader">
+                @{month = ((DateTime)activity.StartDate).ToString("MMMM", new CultureInfo("es-ES"));}
+                <img src="@Url.Content("~/Content/themes/base/icons/bookmark.png")" class="iconMonth" width="140" height="55" alt="Bookmark Image"/>
+                <span class="postMonth">@month</span>
+            </header>
+        }
+        
+        <div class="activityContent">
+            <h3>@activity.Heading</h3>
+            <div style="width:300px">
+                @Html.Raw(activity.Description)
+            </div>
+            <ul class="activityDetails">
+                <li><span class="activityFieldLabel">Fecha:&nbsp;</span><span class="activityFieldValue">@activity.StartDate.ToString("dd MMMM", new CultureInfo("es-ES"))</span></li>
+                <li><span class="activityFieldLabel">Lugar:&nbsp;</span><span class="activityFieldValue">@activity.Place</span></li>
+                <li><span class="activityFieldLabel">Direcci&oacute;n:&nbsp;</span><span class="activityFieldValue">@activity.Address</span></li>
+                <li><span class="activityFieldLabel">P&uacute;blico: &nbsp;</span><span class="activityFieldValue">@activity.RecommendedPublic</span></li>
+                <li><span class="activityFieldLabel">Precio:&nbsp;</span><span class="activityFieldValue">@activity.Price</span></li>
+                @if (!string.IsNullOrEmpty(activity.WebPage)) { 
+                    <li><span class="activityFieldLabel">Web Page:&nbsp;</span><span class="activityFieldValue">@activity.WebPage</span></li>
+                }
+                
+            </ul>
+
+        </div>
+    }
+    
+    
+    <div style="margin:15px 0px 20px 15px">
+        @if (Model.PreviousPage != null)
+        {
+            <a href="@Url.Action("index", "actividades", new { Area = "Blog", pageNo = Model.PreviousPage })">Anterior</a>
+            <img src="@Url.Content("/Content/themes/base/icons/iconlessinfo.png")" style="margin-right: -8px" />
+            <img src="@Url.Content("/Content/themes/base/icons/iconlessinfo.png")" />
+            <span>&nbsp;&nbsp;</span>
+        }
+        @if (Model.NextPage != null)
+        {
+            <img src="@Url.Content("/Content/themes/base/icons/iconmoreinfo.png")" style="margin-right: -8px" />
+            <img src="@Url.Content("/Content/themes/base/icons/iconmoreinfo.png")" />
+            <a href="@Url.Action("index", "actividades", new { Area = "Blog", pageNo = Model.NextPage })">Siguiente</a>
+        }
+    </div>
+    
+</div>
+
+<script src="@Url.Content("~/Scripts/blog/blog.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/contact/opinion.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+    var options = {
+        TabSelected: 'Blogs'
+    };
+
+    blog.init(options);
+
+</script>

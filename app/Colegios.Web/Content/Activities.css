@@ -1,0 +1,43 @@
+﻿.activityHeader 
+{
+    padding-bottom:10px;
+    padding-top:10px
+}
+
+.activityContent
+{
+    width:725px;
+    margin-left:25px;
+    border-bottom: 3px solid #47A5F4;
+    position:relative;
+    overflow:hidden;
+    padding-bottom:20px;
+    padding-top:20px
+} 
+
+.activityBasicDetails 
+{
+    position:absolute;
+    top: 0px;
+    left: 300px;
+    list-style: none;
+    font-size:14px;
+    width:250px;
+    margin-right: 20px;
+    padding-bottom:10px
+}
+
+.activityFieldLabel 
+{
+    display:inline;
+    width:80px;
+    color:#FF4F01;
+    font-weight: bold
+}
+
+.activityFieldValue 
+{
+    color:#4B4D4E;
+    font-weight: bold;
+    font-size:12px
+}

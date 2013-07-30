@@ -1,0 +1,175 @@
+﻿
+    h2.stepHeader 
+    {
+        padding-left:20px;
+        color: #4B4B4D;
+        margin-bottom: 5px;
+    }
+
+    #accountDetails div.row, #commonDetails div.row 
+    {
+        display: block;
+        position: relative;
+        font-size: 1.1em;
+        background-color: silver;
+
+        margin-bottom:0px;
+    }
+    
+    #specificDetails div.row
+    {
+        display: block;
+        position: relative;
+        font-size: 1.1em;
+        width: 760px;
+    }
+    
+    #accountDetails .row label, #commonDetails .row label {
+        display: inline;
+        float: left;
+        width: 200px;
+        margin-left:20px;
+        margin-top: 10px;
+        padding-left:20px;
+        color: #004167;
+    }
+    
+    #specificDetails .row label 
+    {
+        display: inline;
+        float: left;
+        width: 300px;
+        margin: 19px -200px 0 0;
+        padding-left:20px;
+        color: #004167;  
+    } 
+    
+    #accountDetails div.value label, #commonDetails div.value label
+    {
+        display: inline;
+        float:none;
+        margin-left:40px;
+        width: 80px;
+        margin:0px;
+        margin-right:20px;
+    }
+    
+    #accountDetails div.value, #commonDetails div.value {
+        margin-left: 230px;
+        background: #F9FBFB;
+        padding: 5px 0 5px 20px;
+    }
+    
+    #specificDetails div.value
+    {
+        margin-left: 330px;
+        background: #F9FBFB;
+        padding: 5px 0 5px 20px;
+    }
+    
+    #specificDetails 
+    {
+
+        border-top: none;
+        position: relative;
+            
+        margin-left: 80px;
+        margin-right: 80px;
+    }
+    .category {background-color: White; border: 1px solid #C7CED3;}
+    #specificDetails fieldSet 
+    {
+        width: 800px;
+        margin-left: auto;
+        margin-right: auto;border: 2px solid #C0C0C0;background-color:#FFFFFF;
+    }
+    
+    #specificDetails fieldSet legend {
+        color : #4B4B4D;
+    }
+    
+    #accountDetails, #commonDetails
+    {
+        border-top: none;
+        position: relative;
+            
+        margin-left: 80px;
+        margin-right: 80px;
+    }
+    
+    .registrationContainer input[type="text"].small 
+    {
+        width: 120px;
+    }
+    
+    .registrationContainer input[type="text"].long_txt, .registrationContainer input[type="password"].long_txt {
+        width: 260px;
+    }
+    
+    .registrationContainer textArea 
+    {
+        width: 440px;
+        min-height: 55px;
+    }
+    
+    .registrationContainer input[type="text"].xxl_txt 
+    {
+        width: 360px;
+    }
+    
+    .registrationContainer a.continueBtn, .sectors input[type="submit"] {
+        border: 1px solid #444;
+        background: #A3A5A7;
+        color: white;
+        font-family: Verdana;
+        font-weight: normal;
+        font-size: 1.1em;
+        padding: 8px 20px 8px 15px;
+        margin: 5px 0 0px 0;
+        display:inline-block;
+    }
+    
+    .registerinfo 
+    {
+        border: 2px solid #C0C0C0;
+        background-color: #F3F781;
+        font-size: 14px;
+        width: 80%;
+        margin-left:auto;
+        margin-right: auto;
+        text-align:center;
+        padding: 5px;
+        margin-top:0px;
+        margin-bottom: 5px;
+    }
+    
+    .registerinfo p 
+    {
+        margin-top:5px;
+        margin-bottom: 5px;
+    }
+    
+    .field-validation-error 
+    {
+        font-size:12px;
+    }    
+    .input-validation-error 
+    {
+        background-color: #F78181;
+    } 
+    
+    .errorContainer 
+    {
+        background-color: #F78181;
+        color:grey;
+        border:2px solid red;
+        padding: 10px;
+    }
+    
+    .nurseryContent 
+    {
+        width: 100%; 
+        float:left;
+        margin-bottom: 20px;
+        border-bottom: 3px solid #47A5F4
+    }

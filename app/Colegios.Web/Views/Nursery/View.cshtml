@@ -1,0 +1,214 @@
+﻿@using Colegios.Web.Utils
+@using Colegios.Web.Models
+@using System.Configuration
+
+
+@model NurseryDetailViewModel
+
+@section Seo {
+    <title>@Model.Seo.Title</title>
+    <meta name="description" content="@Model.Seo.Description" />
+    <meta name="keywords" content="@Model.Seo.Keywords" />
+}  
+
+@section Styles {
+    <link href="@Url.Content("~/Content/Home.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/School.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/nivo-slider.css")" rel="Stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/default.css")" rel="Stylesheet" type="text/css" />
+}
+
+@Html.Action("Index", "Opinion")
+@Html.Partial("_NurserySearch",Model.SearchModel)
+
+
+<div class="content">
+    <h2 class="resultsHeader">@Model.Nursery.Name</h2> 
+
+
+    <div class="nurseryContent">
+    
+        <div class="schoolDetails">
+            @if (!string.IsNullOrEmpty(Model.LogoName))
+            {
+                <div style="float:left;width:210px; margin-top:10px;height:100%;">  
+                    <center><img alt="string.Format('{0}-Logo',@Model.Nursery.Name)" src="@Url.Content("/Images/Nurseries/" + Model.LogoName)" /></center>
+                </div>               
+            }
+            
+            @if (Model.Nursery.Type.Name.Equals("Público"))
+            {   
+
+                <span style="float:right;margin-right: 0px;font-size:16px; font-weight:bold;margin-top:-10px"><img  alt="SchoolType" width="35" height="35" src="@Url.Content("/Content/themes/base/icons/publico.png")" />@Model.Nursery.Type.Name
+                                <a data-bind="click:function() { showMapSchools(@Model.Nursery.Latitude,@Model.Nursery.Longitude);}" style="float:right;margin-right: 10px;font-size:16px; font-weight:bold;"><img width="35" height="35" style="margin-right: -10px" src="@Url.Content("/Content/themes/base/icons/pin-blue.png")" />Localizaci&oacute;n</a></span>
+            }
+            @if (Model.Nursery.Type.Name.Equals("Privado"))
+            { 
+                <span style="float:right;margin-right: 0px;font-size:16px; font-weight:bold;margin-top:-10px"><img  alt="SchoolType" width="35" height="35" src="@Url.Content("/Content/themes/base/icons/privado.png")" />@Model.Nursery.Type.Name
+                <a data-bind="click:function() { showMapSchools(@Model.Nursery.Latitude,@Model.Nursery.Longitude);}" style="float:right;margin-right: 10px;font-size:16px; font-weight:bold;"><img width="35" height="35" style="margin-right: -10px" src="@Url.Content("/Content/themes/base/icons/pin-green.png")" />Localizaci&oacute;n</a></span>
+            } 
+            @if (Model.Nursery.Type.Name.Equals("Madre de Día"))
+            { 
+                <span style="float:right;margin-right: 0px;font-size:16px; font-weight:bold;margin-top:-10px"><img  alt="SchoolType" width="35" height="35" src="@Url.Content("/Content/themes/base/icons/concertado.png")" />@Model.Nursery.Type.Name
+                <a data-bind="click:function() { showMapSchools(@Model.Nursery.Latitude,@Model.Nursery.Longitude);}" style="float:right;margin-right: 10px;font-size:16px; font-weight:bold;"><img width="35" height="35" style="margin-right: -10px" src="@Url.Content("/Content/themes/base/icons/pin-red.png")" />Localizaci&oacute;n</a></span>
+            } 
+            <ul class="baseInfo">
+                <li><img alt="Phone" width="25" height="25" src="@Url.Content("/Content/themes/base/icons/address.png")" /> @Model.Nursery.Address, CP: @Model.Nursery.PostCode. @Model.Nursery.Locality.Name, @Model.Nursery.Locality.Town.Name @(Model.Nursery.Locality.Type.Id != 3 ? Model.Nursery.Locality.Town.Name : "")
+                
+ 
+                </li>
+                <li>
+                    @if (!string.IsNullOrEmpty(Model.Nursery.Phone))
+                    { 
+                        <img alt="Phone" width="25" height="25" src="@Url.Content("/Content/themes/base/icons/phone.png")" /> @Model.Nursery.Phone 
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Nursery.Fax))
+                    { 
+                        <span> - </span><img alt="Fax" width="20" height="20" src="@Url.Content("/Content/themes/base/icons/fax.png")" />@Model.Nursery.Fax
+                    }
+                </li>
+                @if (!string.IsNullOrEmpty(Model.Nursery.Email))
+                { 
+                    <li>
+                        <img alt="Email" width="25" height="25" src="@Url.Content("/Content/themes/base/icons/contact_email.png")" /> @Model.Nursery.Email
+                    </li>
+                }
+                @if (!string.IsNullOrEmpty(Model.Nursery.Web))
+                { 
+                    <li>
+                        <img alt="Web" width="25" height="25" src="@Url.Content("/Content/themes/base/icons/world_link.png")" /><a href="http://@Model.Nursery.Web" style="text-decoration:none,color:#99CC66" target="_blank"> @Model.Nursery.Web</a>
+                    </li>
+                }
+            </ul>
+
+            @if ((Boolean.Parse(ConfigurationManager.AppSettings["showOpenDays"])) && (!String.IsNullOrEmpty(Model.Nursery.OpenDay)))
+            { 
+                <div>
+                    <span class="puertasAbiertas" style="margin-top:40px; height:30px">Puertas Abiertas: @Model.Nursery.OpenDay </span>
+                    <img src="@Url.Content("/Content/themes/base/icons/opendoors.png")" width="30" height="35" align="left" style="margin-top:-5px"/>
+                </div>
+            }
+
+            <div id="showBlockMapSchools" class="infoContainer" style="display:none;margin-top: -75px">
+                <img class="closeCross" src="@Url.Content("/Content/themes/base/images/common/cross.png")" width="25" height="25" style="margin-right:-22px" data-bind="click: hideMapSchools" />
+                <div id="map_canvas" class="map_locations" style="display:none"></div>
+            </div>
+
+             @{
+                 
+                 var details = @Model.Nursery.Details.OrderBy(x => x.CategoryField.Id).GroupBy(x => x.CategoryField.Category.Name).ToDictionary(x => x.Key);
+                 var index = 1;
+                 foreach (var category in details)
+                 {
+                     var block = String.Empty;
+                     block = (index % 2 == 1) ? "<div class='blockLeft'>" : "<div class='blockRight'>";
+                     block += "<h5 id='left'>" + category.Key + "&nbsp;&nbsp;&nbsp;</h5>";
+
+                     var fields = category.Value.GroupBy(x => x.CategoryField.Name);
+                     foreach (var field in fields)
+                     {
+                         block += "<span class='categoryField'>" + field.Key + "<span>";
+                         block += "<ul class='categoryField'>";
+                         foreach (var value in field)
+                         {
+                             block += "<li>" + @value.CategoryField.Description + "- <span class='categoryValue'>" + @value.Value + "</span></li>";
+                         }
+                         block += "</ul>";
+                     }
+                     index++;
+                     block += "</div>";
+                    @Html.Raw(block);
+                 }
+                 
+             }
+
+            @if (!string.IsNullOrEmpty(Model.Nursery.YoutubeId) && (Model.Nursery.Pics == null || !Model.Nursery.Pics.Any()))
+            { 
+                <div style="text-align:center;display:block;width:100%;clear:both">
+                    @Html.Raw(Model.Nursery.YoutubeId)
+                </div>
+            }
+            else if (string.IsNullOrEmpty(Model.Nursery.YoutubeId) && (Model.Nursery.Pics != null) && (Model.Nursery.Pics.Any()))
+            { 
+                <div class="slider-wrapper theme-default" style="display:block;clear:both; position:relative;margin-left:auto;margin-right:auto">
+	                <div id="slider" class="nivoSlider" style="margin-bottom:5px;margin-left:auto;margin-right:auto;">
+                     @foreach (var pic in Model.Nursery.Pics)
+                     { 
+		                <img src="@Url.Content("~/Images/Nurseries/pics/" + pic.PictureName)" data-thumb="@Url.Content("~/Images/Nurseries/pics" + pic.PictureName)"alt="Imagen Escuela Infantil  @Model.Nursery.Name"  />
+                     }
+	                </div>
+                </div>
+            }
+            else if (!string.IsNullOrEmpty(Model.Nursery.YoutubeId) && (Model.Nursery.Pics != null) && (Model.Nursery.Pics.Any()))
+            { 
+                <div style="display:block;width:100%; clear:both;overflow:hidden">
+                    
+                    <div style="float:left;margin-top:20px">@Html.Raw(Model.Nursery.YoutubeId)</div>
+
+                    <div style="float:left;margin-left:20px">
+                    
+                        <div class="slider-wrapper theme-default" style="display:block;clear:both; position:relative;margin-left:auto;margin-right:auto">
+	                        <div id="slider" class="nivoSlider" style="margin-bottom:5px;margin-left:auto;margin-right:auto;">
+                             @foreach (var pic in Model.Nursery.Pics)
+                             { 
+		                        <img src="@Url.Content("~/Images/Nurseries/pics/" + pic.PictureName)" data-thumb="@Url.Content("~/Images/Nurseries/pics" + pic.PictureName)"alt="Imagen Escuela Infantil  @Model.Nursery.Name"  />
+                             }
+	                        </div>
+                        </div>                  
+                    
+                    </div>
+                
+                </div>
+            }
+
+
+        </div>
+
+@*        @if (Model.Nursery.Pics != null && Model.Nursery.Pics.Any())
+        { *@
+
+@*        //}*@
+
+    </div>
+
+</div>
+
+
+<script src="@Url.Content("~/Scripts/coles/search.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/maps/googleApi.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/contact/opinion.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.nivo.slider.js")" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+    var options = {
+        Elements:  {
+            eldistrict: $('#distrito'),
+            ellocality: $('input[type=checkbox][id=locality]'),
+            hiddenlocation: $('#Locations'),
+            town: $("#TownId")              
+        },
+        CityId: '@Model.SearchModel.CityId',
+        AllEducationTypes: @Html.Raw(Model.BaseModel.EducationTypes.ToJson()),
+        AllCities: @Html.Raw(Model.BaseModel.Cities.ToJson()),
+        AllTowns: @Html.Raw(Model.BaseModel.Towns.ToJson()),
+        AllDistricts: @Html.Raw(Model.BaseModel.Districts.ToJson()),
+        SelectedDistricts: @Html.Raw(Model.SearchModel.Locations != null ? Model.SearchModel.Locations.Split(',').ToArray().ToJson() : "{}"),
+        TownId: '@Model.SearchModel.TownId',
+        EducationType: '@Model.SearchModel.EducationTypeId',
+        District: ko.observable(),
+        HasPics: @((Model.Nursery.Pics != null && Model.Nursery.Pics.Any()) ? "true" : "false"),
+        TabSelected: 'Guarderias',
+        MinimizeSearch: true,
+        MapOptions: {
+            latitude: @Model.Nursery.Latitude,
+            longitude: @Model.Nursery.Longitude
+        },
+        LocationSchools: @Html.Raw(Model.Locations!= null? Model.Locations.ToJson(): "{}")
+    };
+
+
+    colesearch.init(options,mapgoogle);
+
+</script>
+
